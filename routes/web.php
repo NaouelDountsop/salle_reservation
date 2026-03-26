@@ -47,3 +47,11 @@ Route::resource('reservations', ReservationController::class)
         auth()->logout(); // force logout
         return view('welcome');
     });
+
+    Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
+        Route::get('/dashboard', [App\Http\Controllers\AdminController::class, 'dashboard'])
+            ->name('admin.dashboard');
+            
+    Route::delete('/users/{id}', [App\Http\Controllers\AdminController::class, 'destroyUser'])
+                ->name('admin.users.destroy');
+    });

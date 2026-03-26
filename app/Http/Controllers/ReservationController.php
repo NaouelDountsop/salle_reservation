@@ -14,6 +14,20 @@ class ReservationController extends Controller
         return view('reservations.create', compact('room'));
     }
 
+    public function index()
+{
+    if (!auth()->check()) {
+        return redirect()->route('login')
+            ->with('error', 'Veuillez vous connecter');
+    }
+
+    $reservations = auth()->user()->reservations()->with('room')->get();
+
+
+    return view('reservations.index', compact('reservations'));
+
+}
+
     public function store(Request $request)
     {
         // 🚨 BLOQUER SI NON CONNECTÉ
