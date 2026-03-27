@@ -27,5 +27,19 @@ class Reservation extends Model
     return $this->belongsTo(User::class);
     }
 
+    public function getTotalPriceAttribute()
+    {
+        if (!$this->start_time || !$this->end_time || !$this->room) {
+            return 0;
+        }
 
+        $start = \Carbon\Carbon::parse($this->start_time);
+        $end = \Carbon\Carbon::parse($this->end_time);
+
+        
+        $hours = $start->floatDiffInHours($end);
+
+       
+        return round($hours * $this->room->prix, 2);
+    }
 }

@@ -1,7 +1,3 @@
-{{-- ============================================================
-    rooms/index.blade.php — Gold Edition
-    ============================================================ --}}
-
 <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
 {{-- ══ TOAST de confirmation ══ --}}
@@ -265,6 +261,7 @@
                         data-description="{{ $room->description ?? 'Pas de description disponible.' }}"
                         data-capacity="{{ $room->capacity }}"
                         data-location="{{ $room->location }}"
+                        data-price="{{ $room->prix }}"
                     >
                         Réserver
                     </button>
@@ -308,6 +305,7 @@
             <div class="modal-meta">
                 <span class="modal-meta-chip" id="modalCapacityChip">🪑 — places</span>
                 <span class="modal-meta-chip" id="modalLocationChip">📍 —</span>
+                <span class="modal-meta-chip" id="modalPriceChip">💰 — FCFA</span>
             </div>
         </div>
 
@@ -327,6 +325,67 @@
                     <div class="form-group">
                         <label for="end_time">Fin</label>
                         <input type="datetime-local" id="end_time" name="end_time" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="payment-label">Mode de paiement</label>
+                    <input type="hidden" name="payment_method" id="payment_method" value="">
+                    <div class="payment-cards" id="paymentCards">
+
+                        <button type="button" class="payment-card" data-value="cash" aria-pressed="false">
+                            <div class="payment-card__icon">
+                                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="4" y="12" width="40" height="26" rx="4" stroke="currentColor" stroke-width="2.5" fill="none"/>
+                                    <circle cx="24" cy="25" r="7" stroke="currentColor" stroke-width="2.5" fill="none"/>
+                                    <circle cx="24" cy="25" r="3" fill="currentColor"/>
+                                    <line x1="4" y1="19" x2="44" y2="19" stroke="currentColor" stroke-width="2"/>
+                                    <line x1="4" y1="31" x2="44" y2="31" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <span class="payment-card__name">Espèces</span>
+                            <span class="payment-card__desc">Paiement sur place</span>
+                            <span class="payment-card__check">
+                                <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd"/></svg>
+                            </span>
+                        </button>
+
+                        <button type="button" class="payment-card" data-value="mobile_money" aria-pressed="false">
+                            <div class="payment-card__icon">
+                                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="13" y="4" width="22" height="40" rx="4" stroke="currentColor" stroke-width="2.5" fill="none"/>
+                                    <line x1="13" y1="12" x2="35" y2="12" stroke="currentColor" stroke-width="2"/>
+                                    <line x1="13" y1="36" x2="35" y2="36" stroke="currentColor" stroke-width="2"/>
+                                    <circle cx="24" cy="40" r="2" fill="currentColor"/>
+                                    <path d="M19 22 L24 18 L29 22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                                    <path d="M24 18 L24 28" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    <path d="M20 28 L28 28" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <span class="payment-card__name">Mobile Money</span>
+                            <span class="payment-card__desc">MTN / Orange Money</span>
+                            <span class="payment-card__check">
+                                <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd"/></svg>
+                            </span>
+                        </button>
+
+                        <button type="button" class="payment-card" data-value="card" aria-pressed="false">
+                            <div class="payment-card__icon">
+                                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="4" y="10" width="40" height="28" rx="4" stroke="currentColor" stroke-width="2.5" fill="none"/>
+                                    <rect x="4" y="17" width="40" height="7" fill="currentColor" opacity="0.15"/>
+                                    <line x1="4" y1="17" x2="44" y2="17" stroke="currentColor" stroke-width="2"/>
+                                    <rect x="10" y="28" width="10" height="4" rx="1" fill="currentColor" opacity="0.5"/>
+                                    <rect x="24" y="28" width="6" height="4" rx="1" fill="currentColor" opacity="0.3"/>
+                                </svg>
+                            </div>
+                            <span class="payment-card__name">Carte bancaire</span>
+                            <span class="payment-card__desc">Visa / Mastercard</span>
+                            <span class="payment-card__check">
+                                <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd"/></svg>
+                            </span>
+                        </button>
+
                     </div>
                 </div>
 
@@ -350,144 +409,17 @@
 </div>
 
 
-{{-- ══ STYLES ══ --}}
+{{-- ══ STYLES PAYMENT CARDS ══ --}}
 <style>
 
-/* ── Bannière admin ── */
-.admin-banner {
-    background: var(--ink);
-    border-bottom: 1px solid rgba(201,146,42,0.25);
-    padding: 0 48px;
-    position: relative;
-    overflow: hidden;
-}
-.admin-banner::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse 60% 200% at 100% 50%, rgba(201,146,42,0.12) 0%, transparent 60%);
-    pointer-events: none;
-}
-.admin-banner__inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 0;
-    position: relative;
-    z-index: 1;
-}
-.admin-banner__left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-.admin-banner__icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 9px;
-    background: rgba(201,146,42,0.15);
-    border: 1px solid rgba(201,146,42,0.3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-.admin-banner__icon svg {
-    width: 16px;
-    height: 16px;
-    stroke: var(--gold-lt);
-}
-.admin-banner__title {
-    font-family: 'Syne', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    color: #fff;
-    letter-spacing: -0.01em;
-}
-.admin-banner__sub {
-    font-size: 11px;
-    color: rgba(255,255,255,0.4);
-    margin-top: 1px;
-}
-.admin-banner__btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 9px 18px;
-    background: linear-gradient(135deg, var(--gold-lt), var(--gold));
-    color: #fff;
-    border-radius: var(--radius-pill);
-    font-family: 'Instrument Sans', sans-serif;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.03em;
-    text-decoration: none;
-    transition: all var(--t);
-    box-shadow: 0 4px 16px rgba(201,146,42,0.35);
-    flex-shrink: 0;
-}
-.admin-banner__btn svg {
-    width: 13px;
-    height: 13px;
-    stroke: rgba(255,255,255,0.85);
-    flex-shrink: 0;
-}
-.admin-banner__arrow { transition: transform var(--t); }
-.admin-banner__btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 8px 28px rgba(201,146,42,0.50);
-}
-.admin-banner__btn:hover .admin-banner__arrow { transform: translateX(3px); }
-
-/* ── Lien admin dans le dropdown ── */
-.user-dropdown__admin { color: var(--gold-dk) !important; font-weight: 600 !important; }
-.user-dropdown__admin:hover { background: var(--gold-bg) !important; }
-
-/* ── Dropdown utilisateur ── */
-.user-pill { position: relative; }
-.user-dropdown {
-    position: absolute;
-    top: calc(100% + 10px);
-    right: 0;
-    width: 220px;
-    background: #fff;
-    border: 1px solid #ede8df;
-    border-radius: 16px;
-    box-shadow: 0 16px 48px rgba(0,0,0,0.14);
-    overflow: hidden;
-    opacity: 0;
-    transform: translateY(-8px) scale(0.97);
-    pointer-events: none;
-    transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.16,1,0.3,1);
-    transform-origin: top right;
-    z-index: 300;
-}
-.user-dropdown--open { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
-.user-dropdown__header { padding: 14px 16px 12px; border-bottom: 1px solid #ede8df; background: #fdf6e3; }
-.user-dropdown__name { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: #0e0d0b; letter-spacing: -0.01em; }
-.user-dropdown__email { font-size: 11px; color: rgba(14,13,11,0.4); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.user-dropdown__list { list-style: none; padding: 6px 0; }
-.user-dropdown__link { display: block; width: 100%; padding: 9px 16px; font-family: 'Instrument Sans', sans-serif; font-size: 13px; color: #0e0d0b; text-decoration: none; border: none; background: none; cursor: pointer; text-align: left; transition: background 0.2s; }
-.user-dropdown__link:hover { background: #f4f0e8; }
-.user-dropdown__sep { height: 1px; background: #ede8df; margin: 4px 0; }
-.user-dropdown__logout { color: #c0392b; }
-.user-dropdown__logout:hover { background: rgba(239,68,68,0.06); }
-
-@media (max-width: 640px) {
-    .admin-banner { padding: 0 20px; }
-    .admin-banner__sub { display: none; }
-    .admin-banner__btn { padding: 8px 14px; font-size: 11px; }
-    .admin-banner__btn svg:first-child { display: none; }
-}
 </style>
-
 
 {{-- ══ JS ══ --}}
 <script>
 (function () {
     'use strict';
 
-    /* ── Modal ── */
+    /* ── Éléments du modal ── */
     const modal            = document.getElementById('reservationModal');
     const closeBtn         = modal.querySelector('.close-modal');
     const modalIdInput     = document.getElementById('modalRoomId');
@@ -496,14 +428,22 @@
     const modalDescription = document.getElementById('modalRoomDescription');
     const modalCapChip     = document.getElementById('modalCapacityChip');
     const modalLocChip     = document.getElementById('modalLocationChip');
+    const modalPriceChip   = document.getElementById('modalPriceChip');
     const startInput       = document.getElementById('start_time');
     const endInput         = document.getElementById('end_time');
+    const paymentMethod    = document.getElementById('payment_method');
     const errorBox         = document.getElementById('modalError');
+    const form             = modal.querySelector('form');
+    const submitBtn        = form.querySelector('.btn-confirm');
+
+    /* ── Prix horaire de base (mis à jour à chaque ouverture) ── */
+    let pricePerHour = 0;
 
     const pad        = n => String(n).padStart(2, '0');
     const toLocalISO = d =>
         `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:00`;
 
+    /* ── Helpers erreur ── */
     function showError(msg) {
         errorBox.innerHTML = `<span>⚠️</span> ${msg}`;
         errorBox.classList.add('modal-error--visible');
@@ -518,13 +458,32 @@
         errorBox.innerHTML = '';
     }
 
-    function openModal(roomId, roomName, start = null, end = null, description = '', capacity = '', location = '') {
-        modalIdInput.value    = roomId;
-        modalNameHidden.value = roomName;
-        modalTitle.textContent = roomName || 'Réservation';
+    /* ── Calcul dynamique du prix total ── */
+    function updatePrice() {
+        const start = new Date(startInput.value);
+        const end   = new Date(endInput.value);
+        if (startInput.value && endInput.value && end > start) {
+            const hours = (end - start) / (1000 * 60 * 60);
+            const total = Math.ceil(hours * pricePerHour);
+            modalPriceChip.textContent = `💰 ${total.toLocaleString('fr-FR')} FCFA`;
+        } else {
+            modalPriceChip.textContent = `💰 ${pricePerHour.toLocaleString('fr-FR')} FCFA/h`;
+        }
+    }
+
+    /* ── Ouvrir le modal ── */
+    function openModal(roomId, roomName, start = null, end = null, description = '', capacity = '', location = '', price = '') {
+        modalIdInput.value           = roomId;
+        modalNameHidden.value        = roomName;
+        modalTitle.textContent       = roomName || 'Réservation';
         modalDescription.textContent = description || 'Pas de description disponible.';
         if (modalCapChip) modalCapChip.textContent = `🪑 ${capacity || '—'} places`;
         if (modalLocChip) modalLocChip.textContent = `📍 ${location || '—'}`;
+
+        /* Stocker le prix horaire et afficher */
+        pricePerHour = parseFloat(price) || 0;
+        if (modalPriceChip) modalPriceChip.textContent = `💰 ${pricePerHour.toLocaleString('fr-FR')} FCFA/h`;
+
         clearError();
 
         if (start && end) {
@@ -532,13 +491,17 @@
             endInput.value   = end;
         } else {
             const now = new Date();
-            now.setMinutes(0,0,0);
-            now.setHours(now.getHours()+1);
+            now.setMinutes(0, 0, 0);
+            now.setHours(now.getHours() + 1);
             startInput.value = toLocalISO(now);
-            now.setHours(now.getHours()+1);
-            endInput.value = toLocalISO(now);
+            now.setHours(now.getHours() + 1);
+            endInput.value   = toLocalISO(now);
         }
 
+        /* Recalculer le prix dès l'ouverture */
+        updatePrice();
+
+        resetPaymentCards();
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
     }
@@ -548,31 +511,70 @@
         document.body.style.overflow = '';
     }
 
+    /* ── Recalcul en temps réel quand les dates changent ── */
+    startInput.addEventListener('change', updatePrice);
+    endInput.addEventListener('change',   updatePrice);
+
+    /* ── Réouverture après erreur de validation Laravel ── */
     if (window.__modalError) {
         const { roomId, roomName, start, end, errors } = window.__modalError;
         openModal(roomId, roomName, start, end);
         if (errors && errors.length) showError(errors[0]);
     }
 
-    document.querySelector('.pinterest-grid').addEventListener('click', function (e) {
-        const btn = e.target.closest('.open-modal');
-        if (!btn) return;
-        openModal(
-            btn.dataset.id,
-            btn.dataset.name,
-            null, null,
-            btn.dataset.description,
-            btn.dataset.capacity,
-            btn.dataset.location
-        );
-    });
+    /* ── Clic sur "Réserver" ── */
+    const grid = document.querySelector('.pinterest-grid');
+    if (grid) {
+        grid.addEventListener('click', function (e) {
+            const btn = e.target.closest('.open-modal');
+            if (!btn) return;
+            openModal(
+                btn.dataset.id,
+                btn.dataset.name,
+                null,
+                null,
+                btn.dataset.description,
+                btn.dataset.capacity,
+                btn.dataset.location,
+                btn.dataset.price
+            );
+        });
+    }
 
+    /* ── Fermeture modal ── */
     closeBtn.addEventListener('click', closeModal);
     modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-    modal.querySelector('form').addEventListener('submit', function (e) {
+    /* ── Sélection mode de paiement ── */
+    const paymentCards = document.getElementById('paymentCards');
+    if (paymentCards) {
+        paymentCards.addEventListener('click', function (e) {
+            const card = e.target.closest('.payment-card');
+            if (!card) return;
+            paymentCards.querySelectorAll('.payment-card').forEach(c => {
+                c.classList.remove('selected');
+                c.setAttribute('aria-pressed', 'false');
+            });
+            card.classList.add('selected');
+            card.setAttribute('aria-pressed', 'true');
+            paymentMethod.value = card.dataset.value;
+        });
+    }
+
+    function resetPaymentCards() {
+        if (!paymentCards) return;
+        paymentCards.querySelectorAll('.payment-card').forEach(c => {
+            c.classList.remove('selected');
+            c.setAttribute('aria-pressed', 'false');
+        });
+        paymentMethod.value = '';
+    }
+
+    /* ── Validation avant soumission ── */
+    form.addEventListener('submit', function (e) {
         clearError();
+
         if (!startInput.value || !endInput.value) {
             e.preventDefault();
             showError('Veuillez remplir les deux champs de date.');
@@ -583,10 +585,28 @@
             showError("L'heure de fin doit être après l'heure de début.");
             endInput.classList.add('input--error');
             endInput.focus();
+            return;
         }
+        if (!paymentMethod.value) {
+            e.preventDefault();
+            showError('Veuillez choisir un mode de paiement.');
+            return;
+        }
+
+        /* Animation de chargement */
+        if (submitBtn) submitBtn.disabled = true;
+        const messages = {
+            mobile_money: '📱 Paiement Mobile Money en cours...',
+            card:         '💳 Paiement par carte en cours...',
+            cash:         '💵 Paiement en espèces enregistré...'
+        };
+        showError(messages[paymentMethod.value] || 'Traitement en cours...');
+
+        e.preventDefault();
+        setTimeout(() => form.submit(), 2000);
     });
 
-    /* ── Notification panel ── */
+    /* ── Panneau notifications ── */
     const bell     = document.getElementById('notifBell');
     const panel    = document.getElementById('notifPanel');
     const clearBtn = document.getElementById('notifClear');
@@ -644,15 +664,15 @@
     const sortSelect = document.getElementById('sortSelect');
     if (sortSelect) {
         sortSelect.addEventListener('change', function () {
-            const grid  = document.querySelector('.pinterest-grid');
-            const cards = [...grid.querySelectorAll('.pin-card')];
+            const g     = document.querySelector('.pinterest-grid');
+            const cards = [...g.querySelectorAll('.pin-card')];
             cards.sort((a, b) => {
-                if (this.value === 'capacity') return (parseInt(a.dataset.capacity)||0) - (parseInt(b.dataset.capacity)||0);
-                if (this.value === 'name')     return (a.dataset.name||'').localeCompare(b.dataset.name||'');
-                if (this.value === 'location') return (a.dataset.location||'').localeCompare(b.dataset.location||'');
+                if (this.value === 'capacity') return (parseInt(a.dataset.capacity) || 0) - (parseInt(b.dataset.capacity) || 0);
+                if (this.value === 'name')     return (a.dataset.name || '').localeCompare(b.dataset.name || '');
+                if (this.value === 'location') return (a.dataset.location || '').localeCompare(b.dataset.location || '');
                 return 0;
             });
-            cards.forEach(c => grid.appendChild(c));
+            cards.forEach(c => g.appendChild(c));
         });
     }
 

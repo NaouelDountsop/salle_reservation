@@ -34,6 +34,7 @@ class RoomController extends Controller
             'location' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+            'prix' => 'required|numeric',
         ]);
     
         $data = $request->all();
@@ -44,7 +45,6 @@ class RoomController extends Controller
         }
     
         Room::create($data);
-    
         return redirect()->route('rooms.index')->with('success', 'Salle créée avec succès !');
     }
 
@@ -69,7 +69,30 @@ class RoomController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $room = Room::findOrFail($id);
+
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'capacity' => 'required|integer',
+        'location' => 'nullable|string|max:255',
+        'description' => 'nullable|string',
+        'image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+        'prix' => 'required|numeric',
+    ]);
+
+    $data = $request->all();
+
+    if ($request->hasFile('image')) {
+        // Supprimer l'ancienne image si nécessaire
+        if ($room->image) {
+            \Storage::disk('public')->delete($room->image);
+        }
+        $data['image'] = $request->file('image')->store('rooms', 'public');
+    }
+
+    $room->update($data);
+
+    return redirect()->route('rooms.index')->with('success', 'Salle mise à jour avec succès !');
     }
 
     /**

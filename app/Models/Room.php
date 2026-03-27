@@ -15,6 +15,7 @@ class Room extends Model
         'location',
         'description',
         'image',
+        'prix',
     ];
 
 

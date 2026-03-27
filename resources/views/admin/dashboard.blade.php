@@ -7,415 +7,6 @@
 <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 <style>
 
-/* ══════════════════════════════════════════════
-   ADMIN DASHBOARD — Dynamic Gold Edition
-   ══════════════════════════════════════════════ */
-
-body { margin: 0; padding: 0; }
-
-.admin-layout { display: flex; min-height: 100vh; }
-
-/* ══════════════════════════════════
-   SIDEBAR
-   ══════════════════════════════════ */
-.admin-sidebar {
-    width: 240px; flex-shrink: 0;
-    background: var(--ink);
-    display: flex; flex-direction: column;
-    position: fixed; top: 0; left: 0;
-    height: 100vh; z-index: 400;
-    overflow: hidden;
-}
-
-.admin-sidebar::before {
-    content: '';
-    position: absolute; bottom: -60px; left: -60px;
-    width: 220px; height: 220px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(201,146,42,0.14) 0%, transparent 70%);
-    pointer-events: none;
-}
-
-.admin-sidebar::after {
-    content: '';
-    position: absolute; top: 0; left: 0;
-    width: 3px; height: 100%;
-    background: linear-gradient(to bottom, var(--gold-lt), var(--gold), transparent);
-}
-
-/* Logo */
-.sidebar-logo {
-    display: flex; align-items: center; gap: 10px;
-    padding: 24px 20px 20px; text-decoration: none;
-    border-bottom: 1px solid rgba(255,255,255,0.07); flex-shrink: 0;
-}
-
-.sidebar-logo__mark {
-    width: 32px; height: 32px; background: var(--gold);
-    border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-}
-
-.sidebar-logo__mark svg { width: 14px; height: 14px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; }
-
-.sidebar-logo__name { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; color: #fff; letter-spacing: -0.02em; }
-
-.sidebar-logo__badge {
-    margin-left: auto; font-size: 8px; font-weight: 700; letter-spacing: 0.08em;
-    text-transform: uppercase; background: rgba(201,146,42,0.2); color: var(--gold-lt);
-    border: 1px solid rgba(201,146,42,0.3); padding: 2px 6px;
-    border-radius: var(--radius-pill); font-family: 'Instrument Sans', sans-serif;
-}
-
-/* Nav */
-.sidebar-nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
-
-.sidebar-nav__label {
-    font-size: 9px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
-    color: rgba(255,255,255,0.25); padding: 0 8px; margin-bottom: 6px; margin-top: 16px; display: block;
-}
-.sidebar-nav__label:first-child { margin-top: 0; }
-
-.sidebar-nav__link {
-    display: flex; align-items: center; gap: 10px; padding: 9px 10px;
-    border-radius: var(--radius-md); font-family: 'Instrument Sans', sans-serif;
-    font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.5);
-    text-decoration: none; transition: all var(--t); cursor: pointer;
-    border: none; background: none; width: 100%; text-align: left; position: relative;
-}
-
-.sidebar-nav__link svg {
-    width: 15px; height: 15px; flex-shrink: 0; stroke: currentColor; fill: none;
-    stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; opacity: 0.6; transition: opacity var(--t);
-}
-
-.sidebar-nav__link:hover { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.85); }
-.sidebar-nav__link:hover svg { opacity: 1; }
-
-.sidebar-nav__link.active {
-    background: rgba(201,146,42,0.15); color: var(--gold-lt); font-weight: 600;
-}
-.sidebar-nav__link.active svg { opacity: 1; stroke: var(--gold-lt); }
-.sidebar-nav__link.active::before {
-    content: ''; position: absolute; left: -4px; top: 50%; transform: translateY(-50%);
-    width: 3px; height: 18px; background: var(--gold); border-radius: 2px;
-}
-
-.sidebar-nav__count {
-    margin-left: auto; font-size: 10px; font-weight: 700;
-    background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.4);
-    padding: 1px 7px; border-radius: var(--radius-pill); font-family: 'Instrument Sans', sans-serif;
-}
-
-.sidebar-nav__link.active .sidebar-nav__count {
-    background: rgba(201,146,42,0.2); color: var(--gold-lt);
-}
-
-/* Footer */
-.sidebar-footer { border-top: 1px solid rgba(255,255,255,0.07); padding: 14px 16px; flex-shrink: 0; }
-
-.sidebar-user { display: flex; align-items: center; gap: 10px; }
-
-.sidebar-user__avatar {
-    width: 32px; height: 32px; border-radius: 50%;
-    background: linear-gradient(135deg, var(--gold-lt), var(--gold));
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 800; color: #fff; flex-shrink: 0;
-}
-
-.sidebar-user__info { flex: 1; min-width: 0; }
-.sidebar-user__name { font-size: 12px; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: 'Instrument Sans', sans-serif; }
-.sidebar-user__role { font-size: 10px; color: var(--gold); font-family: 'Instrument Sans', sans-serif; margin-top: 1px; }
-
-.sidebar-logout {
-    display: flex; align-items: center; justify-content: center;
-    width: 28px; height: 28px; border-radius: var(--radius-sm);
-    background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2);
-    cursor: pointer; color: rgba(239,68,68,0.7); transition: all var(--t); flex-shrink: 0;
-}
-.sidebar-logout svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
-.sidebar-logout:hover { background: rgba(239,68,68,0.2); color: #ef4444; }
-
-/* ══════════════════════════════════
-   MAIN AREA
-   ══════════════════════════════════ */
-.admin-main { margin-left: 240px; flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
-
-/* Topbar */
-.admin-topbar {
-    background: var(--surface); border-bottom: 1px solid var(--stone);
-    padding: 0 36px; height: 52px;
-    display: flex; align-items: center; justify-content: space-between;
-    position: sticky; top: 0; z-index: 200;
-}
-
-.admin-topbar__left { display: flex; align-items: center; gap: 4px; }
-.admin-topbar__crumb { font-size: 12px; color: var(--ink-40); font-family: 'Instrument Sans', sans-serif; }
-.admin-topbar__sep { font-size: 12px; color: var(--stone); margin: 0 4px; }
-.admin-topbar__crumb.active { color: var(--ink); font-weight: 600; }
-.admin-topbar__date { font-size: 11px; color: var(--ink-40); font-family: 'Instrument Sans', sans-serif; }
-
-/* Hero */
-.admin-hero {
-    background: var(--ink); padding: 28px 36px;
-    display: grid; grid-template-columns: 1fr auto;
-    align-items: center; gap: 24px; position: relative; overflow: hidden;
-}
-.admin-hero::before {
-    content: ''; position: absolute; inset: 0;
-    background: radial-gradient(ellipse 55% 150% at 85% 50%, rgba(201,146,42,0.18) 0%, transparent 70%);
-    pointer-events: none;
-}
-.admin-hero__inner { position: relative; z-index: 1; animation: fadeUp 0.7s var(--ease-out) both; }
-.admin-hero__eyebrow {
-    font-size: 9px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase;
-    color: var(--gold-lt); margin-bottom: 8px; display: flex; align-items: center; gap: 8px;
-}
-.admin-hero__eyebrow::before { content: ''; display: inline-block; width: 16px; height: 1.5px; background: var(--gold); border-radius: 2px; }
-.admin-hero__title { font-family: 'Syne', sans-serif; font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 800; color: #fff; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 6px; }
-.admin-hero__title em { font-style: italic; font-weight: 400; color: var(--gold-lt); }
-.admin-hero__sub { font-size: 13px; color: rgba(255,255,255,0.45); }
-.admin-hero__stats { display: flex; align-items: stretch; border-left: 1px solid rgba(255,255,255,0.08); position: relative; z-index: 1; animation: fadeUp 0.7s 0.08s var(--ease-out) both; }
-.hero-stat { padding: 16px 22px; border-right: 1px solid rgba(255,255,255,0.08); text-align: center; }
-.hero-stat__val { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--gold-lt); line-height: 1; margin-bottom: 4px; }
-.hero-stat__lbl { font-size: 9px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.35); }
-
-@keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-
-/* ══════════════════════════════════
-   PANELS DE CONTENU
-   ══════════════════════════════════ */
-.admin-content { flex: 1; position: relative; }
-
-/* Chaque section est cachée par défaut, visible si active */
-.admin-panel {
-    display: none;
-    padding: 28px 36px 64px;
-    animation: fadeUp 0.35s var(--ease-out) both;
-}
-.admin-panel.active { display: block; }
-
-/* Section header */
-.panel-header {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 20px; padding-bottom: 16px;
-    border-bottom: 1px solid var(--stone);
-}
-.panel-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: var(--ink); letter-spacing: -0.02em; }
-.panel-subtitle { font-size: 12px; color: var(--ink-40); margin-top: 2px; }
-
-/* ── Tables ── */
-.admin-table-wrap {
-    background: var(--surface); border: 1px solid var(--stone);
-    border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-card);
-    margin-bottom: 28px;
-}
-.admin-table-wrap::before { content: ''; display: block; height: 3px; background: linear-gradient(to right, var(--gold-lt), var(--gold)); }
-
-.admin-table { width: 100%; border-collapse: collapse; }
-.admin-table thead tr { background: var(--ink); }
-.admin-table thead th {
-    padding: 10px 16px; text-align: left; font-family: 'Instrument Sans', sans-serif;
-    font-size: 9px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
-    color: rgba(255,255,255,0.4); white-space: nowrap;
-}
-.admin-table thead th:first-child::before { content: ''; display: inline-block; width: 10px; height: 1.5px; background: var(--gold); margin-right: 8px; vertical-align: middle; border-radius: 2px; }
-.admin-table tbody tr { border-bottom: 1px solid var(--stone); transition: background var(--t); cursor: pointer; }
-.admin-table tbody tr:last-child { border-bottom: none; }
-.admin-table tbody tr:hover { background: var(--gold-bg); }
-.admin-table tbody td { padding: 12px 16px; font-size: 13px; color: var(--ink); vertical-align: middle; }
-
-/* Cells */
-.tbl-user { display: flex; align-items: center; gap: 10px; }
-.tbl-avatar {
-    width: 30px; height: 30px; border-radius: 50%;
-    background: linear-gradient(135deg, var(--gold-lt), var(--gold));
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 800; color: #fff; flex-shrink: 0;
-}
-.tbl-name { font-weight: 600; font-size: 13px; color: var(--ink); }
-.tbl-email { font-size: 11px; color: var(--ink-40); margin-top: 1px; }
-
-.tbl-date__main { font-size: 13px; font-weight: 600; color: var(--ink); }
-.tbl-date__time { font-size: 11px; color: var(--ink-40); margin-top: 1px; }
-
-/* Badges statuts */
-.status-badge {
-    display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px;
-    border-radius: var(--radius-pill); font-size: 10px; font-weight: 700;
-    letter-spacing: 0.06em; text-transform: uppercase; font-family: 'Instrument Sans', sans-serif;
-}
-.status-badge::before { content: ''; width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
-
-.status-badge--free    { background: rgba(34,162,94,0.1);  color: #16a34a; border: 1px solid rgba(34,162,94,0.25); }
-.status-badge--free::before    { background: #22c55e; }
-.status-badge--taken   { background: rgba(239,68,68,0.08); color: #dc2626; border: 1px solid rgba(239,68,68,0.2); }
-.status-badge--taken::before   { background: #ef4444; }
-.status-badge--upcoming { background: rgba(201,146,42,0.12); color: var(--gold-dk); border: 1px solid var(--gold-rim); }
-.status-badge--upcoming::before { background: var(--gold); }
-.status-badge--past    { background: var(--stone-2); color: var(--ink-40); border: 1px solid var(--stone); }
-.status-badge--past::before    { background: var(--stone); }
-.status-badge--admin   { background: rgba(201,146,42,0.14); color: var(--gold-dk); border: 1px solid rgba(201,146,42,0.3); }
-.status-badge--admin::before   { background: var(--gold); }
-.status-badge--user    { background: var(--stone-2); color: var(--ink-40); border: 1px solid var(--stone); }
-.status-badge--user::before    { background: var(--stone); }
-
-.tbl-room-chip {
-    display: inline-flex; align-items: center; gap: 5px;
-    background: var(--stone-2); border: 1px solid var(--stone);
-    padding: 3px 10px; border-radius: var(--radius-pill);
-    font-size: 12px; font-weight: 600; color: var(--ink-70);
-}
-
-/* Indicateur "cliquable" */
-.tbl-chevron { color: var(--ink-40); transition: color var(--t); }
-.admin-table tbody tr:hover .tbl-chevron { color: var(--gold); }
-
-/* ══════════════════════════════════
-   DETAIL DRAWER (panneau latéral)
-   ══════════════════════════════════ */
-.detail-overlay {
-    position: fixed; inset: 0; z-index: 900;
-    background: rgba(14,13,11,0.45);
-    backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
-    opacity: 0; pointer-events: none;
-    transition: opacity 0.3s;
-}
-.detail-overlay.open { opacity: 1; pointer-events: auto; }
-
-.detail-drawer {
-    position: fixed; top: 0; right: 0; bottom: 0;
-    width: 420px; max-width: 95vw;
-    background: var(--surface);
-    z-index: 901;
-    display: flex; flex-direction: column;
-    transform: translateX(100%);
-    transition: transform 0.38s var(--ease-out);
-    box-shadow: -24px 0 80px rgba(0,0,0,0.18);
-}
-.detail-drawer.open { transform: translateX(0); }
-
-/* Drawer header sombre */
-.drawer-header {
-    background: var(--ink); padding: 24px 24px 20px;
-    position: relative; overflow: hidden; flex-shrink: 0;
-}
-.drawer-header::before {
-    content: ''; position: absolute; right: -20px; top: -20px;
-    width: 120px; height: 120px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(201,146,42,0.22) 0%, transparent 70%);
-    pointer-events: none;
-}
-.drawer-close {
-    position: absolute; top: 16px; right: 16px;
-    width: 28px; height: 28px; border-radius: 50%;
-    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
-    cursor: pointer; color: rgba(255,255,255,0.6); font-size: 16px;
-    display: flex; align-items: center; justify-content: center;
-    transition: all var(--t); z-index: 2;
-}
-.drawer-close:hover { background: rgba(255,255,255,0.2); color: #fff; }
-
-.drawer-eyebrow {
-    font-size: 9px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
-    color: var(--gold); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; position: relative; z-index: 1;
-}
-.drawer-eyebrow::before { content: ''; display: inline-block; width: 12px; height: 1.5px; background: var(--gold); border-radius: 2px; }
-
-.drawer-title { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800; color: #fff; letter-spacing: -0.03em; line-height: 1.15; position: relative; z-index: 1; margin-bottom: 6px; }
-
-.drawer-meta { display: flex; flex-wrap: wrap; gap: 6px; position: relative; z-index: 1; margin-top: 10px; }
-.drawer-chip {
-    display: inline-flex; align-items: center; gap: 4px;
-    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
-    padding: 4px 10px; border-radius: var(--radius-pill);
-    font-size: 11px; color: rgba(255,255,255,0.6); font-family: 'Instrument Sans', sans-serif;
-}
-
-/* Drawer body */
-.drawer-body { flex: 1; overflow-y: auto; padding: 24px; }
-
-.drawer-field { margin-bottom: 18px; }
-.drawer-field__label {
-    font-size: 9px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
-    color: var(--ink-40); margin-bottom: 5px; display: block;
-}
-.drawer-field__val { font-size: 14px; color: var(--ink); font-weight: 500; }
-.drawer-field__val.muted { color: var(--ink-40); font-size: 13px; }
-
-.drawer-divider { height: 1px; background: var(--stone); margin: 20px 0; }
-
-/* Drawer actions */
-.drawer-actions { padding: 16px 24px; border-top: 1px solid var(--stone); display: flex; gap: 10px; flex-shrink: 0; }
-
-.btn-drawer {
-    flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
-    height: 38px; border-radius: var(--radius-md);
-    font-family: 'Instrument Sans', sans-serif; font-size: 12px; font-weight: 700;
-    cursor: pointer; text-decoration: none; transition: all var(--t); border: none; letter-spacing: 0.02em;
-}
-.btn-drawer svg { width: 13px; height: 13px; flex-shrink: 0; }
-
-.btn-drawer--delete { background: rgba(239,68,68,0.08); color: #dc2626; border: 1px solid rgba(239,68,68,0.2); }
-.btn-drawer--delete:hover { background: rgba(239,68,68,0.15); border-color: rgba(239,68,68,0.4); }
-
-.btn-drawer--secondary { background: var(--stone-2); color: var(--ink-70); border: 1px solid var(--stone); }
-.btn-drawer--secondary:hover { background: var(--stone); }
-
-/* Confirm delete inline */
-.delete-confirm {
-    display: none; padding: 14px 24px; background: rgba(239,68,68,0.06);
-    border-top: 1px solid rgba(239,68,68,0.15); flex-shrink: 0;
-}
-.delete-confirm.visible { display: block; }
-.delete-confirm__text { font-size: 13px; color: #dc2626; font-weight: 500; margin-bottom: 12px; font-family: 'Instrument Sans', sans-serif; }
-.delete-confirm__btns { display: flex; gap: 8px; }
-.btn-confirm-yes {
-    flex: 1; padding: 9px; border-radius: var(--radius-md);
-    background: #dc2626; color: #fff; border: none;
-    font-family: 'Instrument Sans', sans-serif; font-size: 12px; font-weight: 700; cursor: pointer;
-    transition: all var(--t);
-}
-.btn-confirm-yes:hover { background: #b91c1c; }
-.btn-confirm-no {
-    flex: 1; padding: 9px; border-radius: var(--radius-md);
-    background: var(--stone-2); color: var(--ink-70); border: 1px solid var(--stone);
-    font-family: 'Instrument Sans', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer;
-    transition: all var(--t);
-}
-.btn-confirm-no:hover { background: var(--stone); }
-
-/* ── Avatar large dans drawer ── */
-.drawer-avatar-lg {
-    width: 48px; height: 48px; border-radius: 50%;
-    background: linear-gradient(135deg, var(--gold-lt), var(--gold));
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 800; color: #fff;
-    position: relative; z-index: 1; margin-bottom: 12px;
-}
-
-/* Reservation list dans drawer room */
-.drawer-resv-list { display: flex; flex-direction: column; gap: 8px; }
-.drawer-resv-item {
-    background: var(--stone-2); border: 1px solid var(--stone);
-    border-radius: var(--radius-md); padding: 10px 14px;
-    display: flex; align-items: center; justify-content: space-between;
-}
-.drawer-resv-item__info { display: flex; flex-direction: column; gap: 2px; }
-.drawer-resv-item__name { font-size: 12px; font-weight: 600; color: var(--ink); }
-.drawer-resv-item__time { font-size: 11px; color: var(--ink-40); }
-
-/* ══════════════════════════════════
-   RESPONSIVE
-   ══════════════════════════════════ */
-@media (max-width: 900px) {
-    .admin-sidebar { transform: translateX(-100%); transition: transform 0.3s var(--ease-out); }
-    .admin-sidebar.open { transform: translateX(0); }
-    .admin-main { margin-left: 0; }
-    .admin-hero { grid-template-columns: 1fr; padding: 24px 20px; }
-    .admin-hero__stats { border-left: none; border-top: 1px solid rgba(255,255,255,0.08); }
-    .admin-panel { padding: 20px 16px 48px; }
-    .admin-topbar { padding: 0 20px; }
-    .detail-drawer { width: 100%; }
-}
 
 </style>
 </head>
@@ -606,7 +197,10 @@ body { margin: 0; padding: 0; }
                                 </td>
                                 <td><span class="tbl-room-chip">🏢 {{ $res->room->name ?? '—' }}</span></td>
                                 <td>
-                                    <div><div class="tbl-date__main">{{ $start->translatedFormat('d M Y') }}</div><div class="tbl-date__time">{{ $start->format('H:i') }}</div></div>
+                                    <div>
+                                        <div class="tbl-date__main">{{ $start->translatedFormat('d M Y') }}</div>
+                                        <div class="tbl-date__time">{{ $start->format('H:i') }}</div>
+                                    </div>
                                 </td>
                                 <td>
                                     @if($isPast) <span class="status-badge status-badge--past">Terminée</span>
@@ -628,7 +222,17 @@ body { margin: 0; padding: 0; }
                         <div class="panel-title">Salles</div>
                         <div class="panel-subtitle">{{ $totalRooms }} salles enregistrées</div>
                     </div>
+
+                    {{-- ✅ BOUTON AJOUTER UNE SALLE --}}
+                    <button class="btn-add-room" id="btnOpenAddRoom">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        Ajouter une salle
+                    </button>
                 </div>
+
                 <div class="admin-table-wrap">
                     <table class="admin-table">
                         <thead><tr><th>Salle</th><th>Localisation</th><th>Capacité</th><th>Statut</th><th></th></tr></thead>
@@ -725,7 +329,10 @@ body { margin: 0; padding: 0; }
                                 </td>
                                 <td><span class="tbl-room-chip">🏢 {{ $res->room->name ?? '—' }}</span></td>
                                 <td>
-                                    <div><div class="tbl-date__main">{{ $start->translatedFormat('d M Y') }}</div><div class="tbl-date__time">{{ $start->format('H:i') }} → {{ $end->format('H:i') }}</div></div>
+                                    <div>
+                                        <div class="tbl-date__main">{{ $start->translatedFormat('d M Y') }}</div>
+                                        <div class="tbl-date__time">{{ $start->format('H:i') }} → {{ $end->format('H:i') }}</div>
+                                    </div>
                                 </td>
                                 <td style="font-size:12px;color:var(--ink-40);">{{ $durLabel }}</td>
                                 <td>
@@ -795,8 +402,11 @@ body { margin: 0; padding: 0; }
 </div>{{-- /admin-layout --}}
 
 
-{{-- ══ DETAIL DRAWER ══ --}}
+{{-- ══ OVERLAY PARTAGÉ (detail drawer + add room drawer) ══ --}}
 <div class="detail-overlay" id="detailOverlay"></div>
+
+
+{{-- ══ DETAIL DRAWER (fiche utilisateur / salle / réservation) ══ --}}
 <div class="detail-drawer" id="detailDrawer">
     <div class="drawer-header" id="drawerHeader">
         <button class="drawer-close" id="drawerClose">&times;</button>
@@ -815,7 +425,102 @@ body { margin: 0; padding: 0; }
     </div>
 </div>
 
-{{-- Formulaire de suppression (soumis via JS) --}}
+
+{{-- ══ ADD ROOM DRAWER ══ --}}
+<div class="detail-drawer" id="addRoomDrawer">
+    <div class="drawer-header">
+        <button class="drawer-close" id="addRoomClose">&times;</button>
+        <div class="drawer-eyebrow">Gestion des salles</div>
+        <div class="drawer-title">Nouvelle salle</div>
+    </div>
+
+    <form method="POST" action="{{ route('rooms.store') }}"
+          enctype="multipart/form-data"
+          style="display:flex;flex-direction:column;flex:1;overflow:hidden;">
+        @csrf
+
+        <div class="drawer-body" style="display:flex;flex-direction:column;gap:16px;">
+
+            {{-- Erreurs de validation --}}
+            @if($errors->any())
+            <div class="form-errors">
+                <ul>
+                    @foreach($errors->all() as $e)
+                        <li>⚠ {{ $e }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+
+            <div class="form-group">
+                <label>Nom de la salle *</label>
+                <input type="text" name="name" value="{{ old('name') }}"
+                       placeholder="ex: Salle Einstein" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Capacité *</label>
+                    <input type="number" name="capacity" value="{{ old('capacity') }}"
+                           placeholder="ex: 12" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label>Prix (FCFA) *</label>
+                    <input type="number" name="prix" value="{{ old('prix') }}"
+                           placeholder="ex: 15000" step="0.01" min="0" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Localisation</label>
+                <input type="text" name="location" value="{{ old('location') }}"
+                       placeholder="ex: Bâtiment A, 2ème étage">
+            </div>
+
+            <div class="form-group">
+                <label>Description</label>
+                <textarea name="description"
+                          placeholder="Équipements, caractéristiques particulières...">{{ old('description') }}</textarea>
+            </div>
+
+            <div class="drawer-divider"></div>
+
+            <div class="form-group">
+                <label>Image de la salle</label>
+                <div class="upload-zone" id="addRoomUploadZone">
+                    <input type="file" name="image" accept="image/*" id="addRoomImageInput">
+                    <div class="upload-zone__icon">🖼️</div>
+                    <div class="upload-zone__text">
+                        <strong>Cliquez</strong> ou glissez une image ici<br>
+                        JPG, PNG, WEBP — 5 Mo max
+                    </div>
+                    <img class="upload-preview" id="addRoomPreview" alt="Aperçu de l'image">
+                </div>
+            </div>
+
+        </div>{{-- /drawer-body --}}
+
+        <div class="drawer-actions">
+            <button type="button" class="btn-drawer btn-drawer--secondary" id="addRoomCancel">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+                Annuler
+            </button>
+            <button type="submit" class="btn-drawer btn-drawer--primary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                Créer la salle
+            </button>
+        </div>
+
+    </form>
+</div>{{-- /addRoomDrawer --}}
+
+
+{{-- Formulaire de suppression utilisateur (soumis via JS) --}}
 <form id="deleteUserForm" method="POST" style="display:none;">
     @csrf
     @method('DELETE')
@@ -828,10 +533,17 @@ body { margin: 0; padding: 0; }
 
     /* ── Date ── */
     const dateEl = document.getElementById('adminDate');
-    if (dateEl) dateEl.textContent = new Date().toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+    if (dateEl) dateEl.textContent = new Date().toLocaleDateString('fr-FR', {
+        weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+    });
 
     /* ── Navigation panels ── */
-    const panelLabels = { dashboard: 'Tableau de bord', rooms: 'Salles', reservations: 'Réservations', users: 'Utilisateurs' };
+    const panelLabels = {
+        dashboard:    'Tableau de bord',
+        rooms:        'Salles',
+        reservations: 'Réservations',
+        users:        'Utilisateurs'
+    };
 
     document.querySelectorAll('[data-panel]').forEach(btn => {
         btn.addEventListener('click', function () {
@@ -843,26 +555,61 @@ body { margin: 0; padding: 0; }
         });
     });
 
-    /* ── Drawer ── */
-    const overlay     = document.getElementById('detailOverlay');
-    const drawer      = document.getElementById('detailDrawer');
-    const drawerClose = document.getElementById('drawerClose');
+ 
+    const overlay      = document.getElementById('detailOverlay');
+    const detailDrawer = document.getElementById('detailDrawer');
+    const addRoomDrawer= document.getElementById('addRoomDrawer');
 
-    function openDrawer() {
+    /* -- Fermer tout -- */
+    function closeAll() {
+        overlay.classList.remove('open');
+        detailDrawer.classList.remove('open');
+        addRoomDrawer.classList.remove('open');
+    }
+
+    /* -- Ouvrir detail drawer -- */
+    function openDetailDrawer() {
+        addRoomDrawer.classList.remove('open');
         overlay.classList.add('open');
-        drawer.classList.add('open');
+        detailDrawer.classList.add('open');
         document.getElementById('deleteConfirm').classList.remove('visible');
     }
 
-    function closeDrawer() {
-        overlay.classList.remove('open');
-        drawer.classList.remove('open');
+    /* -- Ouvrir add room drawer -- */
+    function openAddRoom() {
+        detailDrawer.classList.remove('open');
+        overlay.classList.add('open');
+        addRoomDrawer.classList.add('open');
     }
 
-    overlay.addEventListener('click', closeDrawer);
-    drawerClose.addEventListener('click', closeDrawer);
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
+    /* -- Listeners fermeture -- */
+    overlay.addEventListener('click', closeAll);
+    document.getElementById('drawerClose').addEventListener('click', closeAll);
+    document.getElementById('addRoomClose').addEventListener('click', closeAll);
+    document.getElementById('addRoomCancel').addEventListener('click', closeAll);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAll(); });
 
+    /* -- Bouton ouvrir add room -- */
+    document.getElementById('btnOpenAddRoom').addEventListener('click', openAddRoom);
+
+    /* -- Aperçu image -- */
+    document.getElementById('addRoomImageInput').addEventListener('change', function () {
+        const file = this.files[0];
+        if (!file) return;
+        const preview = document.getElementById('addRoomPreview');
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = 'block';
+    });
+
+    /* ── Si erreurs de validation Laravel → rouvrir le drawer add room ── */
+    @if($errors->any())
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelector('[data-panel="rooms"]')?.click();
+        openAddRoom();
+    });
+    @endif
+
+   
     function field(label, value, muted = false) {
         return `<div class="drawer-field">
             <span class="drawer-field__label">${label}</span>
@@ -878,12 +625,12 @@ body { margin: 0; padding: 0; }
         return `<span class="status-badge status-badge--${type}">${label}</span>`;
     }
 
-    /* ── USER rows ── */
+   
     document.querySelectorAll('.user-row').forEach(row => {
         row.addEventListener('click', function () {
             const d = this.dataset;
-            const isAdmin = d.role === 'admin';
-            const initials = d.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
+            const isAdmin  = d.role === 'admin';
+            const initials = d.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
 
             document.getElementById('drawerEyebrow').textContent = 'Fiche utilisateur';
             document.getElementById('drawerTitle').innerHTML = `
@@ -896,22 +643,28 @@ body { margin: 0; padding: 0; }
 
             document.getElementById('drawerBody').innerHTML =
                 field('Email', `<a href="mailto:${d.email}" style="color:var(--gold-dk);text-decoration:none;">${d.email}</a>`) +
-                field('Rôle', isAdmin ? statusBadge('admin','Admin') : statusBadge('user','Utilisateur')) +
+                field('Rôle', isAdmin ? statusBadge('admin', 'Admin') : statusBadge('user', 'Utilisateur')) +
                 field('Inscrit le', d.created) +
                 field('Réservations', d.resvCount) +
                 '<div class="drawer-divider"></div>' +
                 field('ID', `#${d.id}`, true);
 
-            const actions = document.getElementById('drawerActions');
-            const deleteUrl = d.deleteUrl;
+            const actions    = document.getElementById('drawerActions');
+            const deleteUrl  = d.deleteUrl;
 
             actions.innerHTML = `
-                <button class="btn-drawer btn-drawer--secondary" onclick="closeDrawerFn()">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                <button class="btn-drawer btn-drawer--secondary" onclick="window.__closeDrawer()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
                     Fermer
                 </button>
                 <button class="btn-drawer btn-drawer--delete" id="btnDeleteUser">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                        <polyline points="3 6 5 6 21 6"/>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+                    </svg>
                     Supprimer
                 </button>
             `;
@@ -934,27 +687,28 @@ body { margin: 0; padding: 0; }
                 confirmBox.classList.remove('visible');
             };
 
-            openDrawer();
+            openDetailDrawer();
         });
     });
 
-    window.closeDrawerFn = closeDrawer;
+    /* Expose pour les boutons inline */
+    window.__closeDrawer = closeAll;
 
-    /* ── ROOM rows ── */
+
     document.querySelectorAll('.room-row').forEach(row => {
         row.addEventListener('click', function () {
-            const d = this.dataset;
+            const d      = this.dataset;
             const isFree = d.status === 'free';
 
             document.getElementById('drawerEyebrow').textContent = 'Fiche salle';
-            document.getElementById('drawerTitle').textContent = d.name;
+            document.getElementById('drawerTitle').textContent   = d.name;
             document.getElementById('drawerMeta').innerHTML =
                 chip(`📍 ${d.location}`) +
                 chip(isFree ? '🟢 Libre' : '🔴 Occupée') +
                 (d.capacity !== '—' ? chip(`👥 ${d.capacity} places`) : '');
 
             document.getElementById('drawerBody').innerHTML =
-                field('Statut actuel', isFree ? statusBadge('free','Libre') : statusBadge('taken','Occupée')) +
+                field('Statut actuel', isFree ? statusBadge('free', 'Libre') : statusBadge('taken', 'Occupée')) +
                 field('Localisation', d.location) +
                 field('Capacité', d.capacity !== '—' ? d.capacity + ' personnes' : '—') +
                 field('Total réservations', d.resvCount) +
@@ -963,46 +717,50 @@ body { margin: 0; padding: 0; }
                 (d.description ? '<div class="drawer-divider"></div>' + field('Description', d.description, true) : '');
 
             document.getElementById('drawerActions').innerHTML = `
-                <button class="btn-drawer btn-drawer--secondary" onclick="closeDrawerFn()">Fermer</button>
+                <button class="btn-drawer btn-drawer--secondary" onclick="window.__closeDrawer()">Fermer</button>
             `;
             document.getElementById('deleteConfirm').classList.remove('visible');
 
-            openDrawer();
+            openDetailDrawer();
         });
     });
 
-    /* ── RESERVATION rows ── */
+    
     document.querySelectorAll('.resv-row').forEach(row => {
         row.addEventListener('click', function () {
             const d = this.dataset;
-            const statusMap = { past: ['past','Terminée'], today: ['upcoming','Aujourd\'hui'], upcoming: ['upcoming','À venir'] };
-            const [sc, sl] = statusMap[d.status] || ['past','—'];
+            const statusMap = {
+                past:     ['past',     'Terminée'],
+                today:    ['upcoming', "Aujourd'hui"],
+                upcoming: ['upcoming', 'À venir']
+            };
+            const [sc, sl] = statusMap[d.status] || ['past', '—'];
 
             document.getElementById('drawerEyebrow').textContent = 'Détail réservation';
-            document.getElementById('drawerTitle').textContent = d.room;
+            document.getElementById('drawerTitle').textContent   = d.room;
             document.getElementById('drawerMeta').innerHTML =
                 chip(`👤 ${d.user}`) +
-                chip(statusMap[d.status] ? `${d.status === 'past' ? '✅' : '📅'} ${sl}` : '');
+                chip(`${d.status === 'past' ? '✅' : '📅'} ${sl}`);
 
             document.getElementById('drawerBody').innerHTML =
-                field('Statut', statusBadge(sc, sl)) +
-                field('Salle', d.room) +
-                field('Localisation', d.location) +
+                field('Statut',      statusBadge(sc, sl)) +
+                field('Salle',       d.room) +
+                field('Localisation',d.location) +
                 '<div class="drawer-divider"></div>' +
                 field('Réservé par', d.user) +
                 (d.userEmail ? field('Email', `<a href="mailto:${d.userEmail}" style="color:var(--gold-dk);text-decoration:none;">${d.userEmail}</a>`) : '') +
                 '<div class="drawer-divider"></div>' +
-                field('Date', d.start.split(' ')[0]) +
-                field('Horaires', `${d.start.split(' ')[1]} → ${d.end}`) +
+                field('Date',    d.start.split(' ')[0]) +
+                field('Horaires',`${d.start.split(' ')[1]} → ${d.end}`) +
                 (d.duration ? field('Durée', d.duration) : '') +
                 field('ID réservation', `#${d.id}`, true);
 
             document.getElementById('drawerActions').innerHTML = `
-                <button class="btn-drawer btn-drawer--secondary" onclick="closeDrawerFn()">Fermer</button>
+                <button class="btn-drawer btn-drawer--secondary" onclick="window.__closeDrawer()">Fermer</button>
             `;
             document.getElementById('deleteConfirm').classList.remove('visible');
 
-            openDrawer();
+            openDetailDrawer();
         });
     });
 

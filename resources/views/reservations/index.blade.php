@@ -1,6 +1,3 @@
-{{-- ============================================================
-    reservations/index.blade.php — Gold Edition
-    ============================================================ --}}
 
 <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
