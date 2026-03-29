@@ -1,28 +1,16 @@
 <?php
+
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\ReservationController;
-// ✅ Cette ligne DOIT être présente en haut de routes/web.php
 use App\Http\Controllers\AdminController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
 */
-
-// 
-
-
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
 
 /* ── Auth ── */
 Route::get('/register',  [AuthController::class, 'showRegisterForm'])->name('register');
@@ -48,7 +36,14 @@ Route::get('reservations/create/{room}', [ReservationController::class, 'create'
 Route::resource('reservations', ReservationController::class)
     ->except(['create']);
 
-/* ── Administration ── */
+/* ── Administration ──────────────────────────────────────────────────────
+ *
+ *  Middleware 'admin' (App\Http\Middleware\AdminMiddleware) :
+ *   • Non connecté        → redirect /login
+ *   • Connecté, pas admin → redirect / + flash 'error'
+ *   • Admin confirmé      → accès accordé
+ *
+ * ─────────────────────────────────────────────────────────────────────── */
 Route::prefix('admin')
     ->middleware(['auth', 'admin'])
     ->name('admin.')
@@ -59,13 +54,35 @@ Route::prefix('admin')
             ->name('dashboard');
 
         // Utilisateurs
-        Route::post('/users',         [AdminController::class, 'storeUser'])
+        Route::post('/users',        [AdminController::class, 'storeUser'])
             ->name('users.store');
 
-        Route::delete('/users/{id}',  [AdminController::class, 'destroyUser'])
+        Route::delete('/users/{id}', [AdminController::class, 'destroyUser'])
             ->name('users.destroy');
 
         // Salles (modification via admin)
-        Route::put('/rooms/{room}',   [AdminController::class, 'updateRoom'])
+        Route::put('/rooms/{room}',  [AdminController::class, 'updateRoom'])
             ->name('rooms.update');
     });
+
+/*
+|--------------------------------------------------------------------------
+| Enregistrement du middleware 'admin'
+|--------------------------------------------------------------------------
+|
+| Laravel 11+  → bootstrap/app.php :
+|
+|     ->withMiddleware(function (Middleware $middleware) {
+|         $middleware->alias([
+|             'admin' => \App\Http\Middleware\AdminMiddleware::class,
+|         ]);
+|     })
+|
+| Laravel 10-  → app/Http/Kernel.php :
+|
+|     protected $routeMiddleware = [
+|         // ...
+|         'admin' => \App\Http\Middleware\AdminMiddleware::class,
+|     ];
+|
+*/

@@ -81,18 +81,38 @@
             </div>
         </div>
 
-        {{-- Bouton Admin topbar --}}
+        {{-- ══ Bouton Admin topbar — visible par tous ══ --}}
+        {{-- Redirige vers login si non connecté, vers login si connecté mais pas admin, vers dashboard si admin --}}
         @auth
             @if(auth()->user()->role === 'admin')
-            <a href="{{ route('admin.dashboard') }}" class="btn-admin">
+                {{-- Admin confirmé → accès direct --}}
+                <a href="{{ route('admin.dashboard') }}" class="btn-admin">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                        <circle cx="12" cy="8" r="3"/>
+                        <path d="M12 11c-5 0-8 2.5-8 4v1h16v-1c0-1.5-3-4-8-4z"/>
+                        <path d="M19 3l2 2-7 7-3-1 1-3z"/>
+                    </svg>
+                    Admin
+                </a>
+            @else
+                {{-- Connecté mais pas admin → redirige vers login avec message --}}
+                <a href="{{ route('login') }}?unauthorized=1" class="btn-admin btn-admin--locked" title="Accès réservé aux administrateurs">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    </svg>
+                    Admin
+                </a>
+            @endif
+        @else
+            {{-- Non connecté → redirige vers login --}}
+            <a href="{{ route('login') }}" class="btn-admin btn-admin--locked" title="Connectez-vous pour accéder à l'administration">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-                    <circle cx="12" cy="8" r="3"/>
-                    <path d="M12 11c-5 0-8 2.5-8 4v1h16v-1c0-1.5-3-4-8-4z"/>
-                    <path d="M19 3l2 2-7 7-3-1 1-3z"/>
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                 </svg>
                 Admin
             </a>
-            @endif
         @endauth
 
         {{-- Utilisateur connecté --}}
@@ -170,40 +190,76 @@
 </header>
 
 
-{{-- ══ BANNIÈRE ADMIN ══ --}}
-@auth
-    @if(auth()->user()->role === 'admin')
-    <div class="admin-banner">
-        <div class="admin-banner__inner">
-            <div class="admin-banner__left">
-                <div class="admin-banner__icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                        <path d="M2 17l10 5 10-5"/>
-                        <path d="M2 12l10 5 10-5"/>
-                    </svg>
-                </div>
-                <div>
-                    <p class="admin-banner__title">Mode administrateur</p>
-                    <p class="admin-banner__sub">Vous avez accès au tableau de bord de gestion</p>
-                </div>
-            </div>
-            <a href="{{ route('admin.dashboard') }}" class="admin-banner__btn">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                    <rect x="3" y="3" width="7" height="7" rx="1"/>
-                    <rect x="14" y="3" width="7" height="7" rx="1"/>
-                    <rect x="3" y="14" width="7" height="7" rx="1"/>
-                    <rect x="14" y="14" width="7" height="7" rx="1"/>
+{{-- ══ BANNIÈRE ADMIN — visible par tous ══ --}}
+<div class="admin-banner">
+    <div class="admin-banner__inner">
+        <div class="admin-banner__left">
+            <div class="admin-banner__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                    <path d="M2 17l10 5 10-5"/>
+                    <path d="M2 12l10 5 10-5"/>
                 </svg>
-                Tableau de bord Admin
+            </div>
+            <div>
+                @auth
+                    @if(auth()->user()->role === 'admin')
+                        <p class="admin-banner__title">Mode administrateur</p>
+                        <p class="admin-banner__sub">Vous avez accès au tableau de bord de gestion</p>
+                    @else
+                        <p class="admin-banner__title">Espace Administration</p>
+                        <p class="admin-banner__sub">Accès réservé aux administrateurs</p>
+                    @endif
+                @else
+                    <p class="admin-banner__title">Espace Administration</p>
+                    <p class="admin-banner__sub">Connectez-vous avec un compte administrateur</p>
+                @endauth
+            </div>
+        </div>
+
+        {{-- Lien conditionnel selon le statut --}}
+        @auth
+            @if(auth()->user()->role === 'admin')
+                <a href="{{ route('admin.dashboard') }}" class="admin-banner__btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                        <rect x="3" y="3" width="7" height="7" rx="1"/>
+                        <rect x="14" y="3" width="7" height="7" rx="1"/>
+                        <rect x="3" y="14" width="7" height="7" rx="1"/>
+                        <rect x="14" y="14" width="7" height="7" rx="1"/>
+                    </svg>
+                    Tableau de bord Admin
+                    <svg class="admin-banner__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            @else
+                {{-- Connecté mais pas admin → login avec flag --}}
+                <a href="{{ route('login') }}?unauthorized=1" class="admin-banner__btn admin-banner__btn--locked">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    </svg>
+                    Accès restreint
+                    <svg class="admin-banner__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            @endif
+        @else
+            {{-- Non connecté → login --}}
+            <a href="{{ route('login') }}" class="admin-banner__btn admin-banner__btn--locked">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+                Se connecter
                 <svg class="admin-banner__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>
             </a>
-        </div>
+        @endauth
     </div>
-    @endif
-@endauth
+</div>
 
 
 {{-- ══ FILTRES ══ --}}
@@ -409,11 +465,6 @@
 </div>
 
 
-{{-- ══ STYLES PAYMENT CARDS ══ --}}
-<style>
-
-</style>
-
 {{-- ══ JS ══ --}}
 <script>
 (function () {
@@ -436,14 +487,12 @@
     const form             = modal.querySelector('form');
     const submitBtn        = form.querySelector('.btn-confirm');
 
-    /* ── Prix horaire de base (mis à jour à chaque ouverture) ── */
     let pricePerHour = 0;
 
     const pad        = n => String(n).padStart(2, '0');
     const toLocalISO = d =>
         `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:00`;
 
-    /* ── Helpers erreur ── */
     function showError(msg) {
         errorBox.innerHTML = `<span>⚠️</span> ${msg}`;
         errorBox.classList.add('modal-error--visible');
@@ -458,7 +507,6 @@
         errorBox.innerHTML = '';
     }
 
-    /* ── Calcul dynamique du prix total ── */
     function updatePrice() {
         const start = new Date(startInput.value);
         const end   = new Date(endInput.value);
@@ -471,7 +519,6 @@
         }
     }
 
-    /* ── Ouvrir le modal ── */
     function openModal(roomId, roomName, start = null, end = null, description = '', capacity = '', location = '', price = '') {
         modalIdInput.value           = roomId;
         modalNameHidden.value        = roomName;
@@ -480,7 +527,6 @@
         if (modalCapChip) modalCapChip.textContent = `🪑 ${capacity || '—'} places`;
         if (modalLocChip) modalLocChip.textContent = `📍 ${location || '—'}`;
 
-        /* Stocker le prix horaire et afficher */
         pricePerHour = parseFloat(price) || 0;
         if (modalPriceChip) modalPriceChip.textContent = `💰 ${pricePerHour.toLocaleString('fr-FR')} FCFA/h`;
 
@@ -498,9 +544,7 @@
             endInput.value   = toLocalISO(now);
         }
 
-        /* Recalculer le prix dès l'ouverture */
         updatePrice();
-
         resetPaymentCards();
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
@@ -511,18 +555,15 @@
         document.body.style.overflow = '';
     }
 
-    /* ── Recalcul en temps réel quand les dates changent ── */
     startInput.addEventListener('change', updatePrice);
     endInput.addEventListener('change',   updatePrice);
 
-    /* ── Réouverture après erreur de validation Laravel ── */
     if (window.__modalError) {
         const { roomId, roomName, start, end, errors } = window.__modalError;
         openModal(roomId, roomName, start, end);
         if (errors && errors.length) showError(errors[0]);
     }
 
-    /* ── Clic sur "Réserver" ── */
     const grid = document.querySelector('.pinterest-grid');
     if (grid) {
         grid.addEventListener('click', function (e) {
@@ -541,12 +582,10 @@
         });
     }
 
-    /* ── Fermeture modal ── */
     closeBtn.addEventListener('click', closeModal);
     modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-    /* ── Sélection mode de paiement ── */
     const paymentCards = document.getElementById('paymentCards');
     if (paymentCards) {
         paymentCards.addEventListener('click', function (e) {
@@ -571,7 +610,6 @@
         paymentMethod.value = '';
     }
 
-    /* ── Validation avant soumission ── */
     form.addEventListener('submit', function (e) {
         clearError();
 
@@ -593,7 +631,6 @@
             return;
         }
 
-        /* Animation de chargement */
         if (submitBtn) submitBtn.disabled = true;
         const messages = {
             mobile_money: '📱 Paiement Mobile Money en cours...',

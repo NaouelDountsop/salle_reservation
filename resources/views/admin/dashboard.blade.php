@@ -5,10 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Dashboard — EspaceIdées</title>
 <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-<style>
-
-
-</style>
 </head>
 
 <body>
@@ -217,7 +213,6 @@
                 </div>
                 <div class="admin-table-wrap">
                     <table class="admin-table">
-                        {{-- ✅ Colonne Type ajoutée --}}
                         <thead><tr><th>Salle</th><th>Type</th><th>Localisation</th><th>Capacité</th><th>Prix</th><th>Statut</th><th></th></tr></thead>
                         <tbody>
                             @foreach($rooms as $room)
@@ -236,7 +231,7 @@
                                     'vip'        => ['👑', 'VIP'],
                                     'conference' => ['🎤', 'Conférence'],
                                     'coworking'  => ['💼', 'Coworking'],
-                                    'mariage'  => ['💼', 'mariage'],
+                                    'mariage'    => ['💒', 'Mariage'],
                                 ];
                                 $roomType  = $room->type ?? 'standard';
                                 $typeInfo  = $typeLabels[$roomType] ?? ['⭐', ucfirst($roomType)];
@@ -261,7 +256,6 @@
                                         <div class="tbl-name">{{ $room->name }}</div>
                                     </div>
                                 </td>
-                                {{-- ✅ Badge type --}}
                                 <td><span class="type-badge type-badge--{{ $roomType }}">{{ $typeInfo[0] }} {{ $typeInfo[1] }}</span></td>
                                 <td style="color:var(--ink-40);font-size:12px;">📍 {{ $room->location ?? '—' }}</td>
                                 <td style="font-size:13px;color:var(--ink);">@if($room->capacity) 👥 {{ $room->capacity }} places @else — @endif</td>
@@ -399,7 +393,7 @@
 <div class="detail-overlay" id="detailOverlay"></div>
 
 
-{{-- ══ DETAIL DRAWER (fiche) ══ --}}
+{{-- ══ DETAIL DRAWER ══ --}}
 <div class="detail-drawer" id="detailDrawer">
     <div class="drawer-header" id="drawerHeader">
         <button class="drawer-close" id="drawerClose">&times;</button>
@@ -446,15 +440,15 @@
                        value="{{ old('name') }}" placeholder="ex: Salle Einstein" required>
             </div>
 
-            {{-- ✅ SELECT TYPE avec valeur par défaut "standard" --}}
             <div class="form-group">
                 <label>Type de salle *</label>
                 <select name="type" id="roomFieldType" required>
                     <option value="standard"   id="typeOpt_standard">⭐ Standard</option>
                     <option value="premium"    id="typeOpt_premium">✨ Premium</option>
-                    <option value="vip"        id="typeOpt_vip">👑 mariage</option>
+                    <option value="vip"        id="typeOpt_vip">👑 VIP</option>
                     <option value="conference" id="typeOpt_conference">🎤 Conférence</option>
                     <option value="coworking"  id="typeOpt_coworking">💼 Coworking</option>
+                    <option value="mariage"    id="typeOpt_mariage">💒 Mariage</option>
                 </select>
             </div>
 
@@ -508,7 +502,7 @@
             </button>
         </div>
     </form>
-</div>{{-- /addRoomDrawer --}}
+</div>
 
 
 {{-- ══ ADD USER DRAWER ══ --}}
@@ -573,7 +567,7 @@
             </button>
         </div>
     </form>
-</div>{{-- /addUserDrawer --}}
+</div>
 
 
 {{-- Formulaire suppression utilisateur --}}
@@ -587,29 +581,29 @@
 (function () {
     'use strict';
 
-    /* ════════════════════════════════════════
+    /* ════════════════════════════
        HAMBURGER
-    ════════════════════════════════════════ */
+    ════════════════════════════ */
     const hamburger  = document.getElementById('sidebarHamburger');
     const sidebar    = document.getElementById('adminSidebar');
     const sidebarOvl = document.getElementById('sidebarOverlay');
 
-    function openSidebar() { sidebar.classList.add('is-open'); sidebarOvl.classList.add('open'); hamburger.classList.add('is-open'); hamburger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
+    function openSidebar()  { sidebar.classList.add('is-open'); sidebarOvl.classList.add('open'); hamburger.classList.add('is-open'); hamburger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
     function closeSidebar() { sidebar.classList.remove('is-open'); sidebarOvl.classList.remove('open'); hamburger.classList.remove('is-open'); hamburger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
 
     hamburger.addEventListener('click', () => sidebar.classList.contains('is-open') ? closeSidebar() : openSidebar());
     sidebarOvl.addEventListener('click', closeSidebar);
     sidebar.querySelectorAll('[data-panel]').forEach(btn => btn.addEventListener('click', () => { if (window.innerWidth <= 900) closeSidebar(); }));
 
-    /* ════════════════════════════════════════
+    /* ════════════════════════════
        DATE
-    ════════════════════════════════════════ */
+    ════════════════════════════ */
     const dateEl = document.getElementById('adminDate');
     if (dateEl) dateEl.textContent = new Date().toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
 
-    /* ════════════════════════════════════════
+    /* ════════════════════════════
        NAVIGATION PANELS
-    ════════════════════════════════════════ */
+    ════════════════════════════ */
     const panelLabels = { dashboard:'Tableau de bord', rooms:'Salles', reservations:'Réservations', users:'Utilisateurs' };
     document.querySelectorAll('[data-panel]').forEach(btn => {
         btn.addEventListener('click', function () {
@@ -623,17 +617,17 @@
         });
     });
 
-    /* ════════════════════════════════════════
+    /* ════════════════════════════
        DRAWERS
-    ════════════════════════════════════════ */
+    ════════════════════════════ */
     const overlay       = document.getElementById('detailOverlay');
     const detailDrawer  = document.getElementById('detailDrawer');
     const addRoomDrawer = document.getElementById('addRoomDrawer');
     const addUserDrawer = document.getElementById('addUserDrawer');
     const allDrawers    = [detailDrawer, addRoomDrawer, addUserDrawer];
 
-    function closeAll() { overlay.classList.remove('open'); allDrawers.forEach(d => d.classList.remove('open')); }
-    function openDrawer(d) { allDrawers.forEach(x => x.classList.remove('open')); overlay.classList.add('open'); d.classList.add('open'); }
+    function closeAll()     { overlay.classList.remove('open'); allDrawers.forEach(d => d.classList.remove('open')); }
+    function openDrawer(d)  { allDrawers.forEach(x => x.classList.remove('open')); overlay.classList.add('open'); d.classList.add('open'); }
 
     overlay.addEventListener('click', closeAll);
     document.getElementById('drawerClose').addEventListener('click', closeAll);
@@ -644,9 +638,9 @@
     document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeSidebar(); closeAll(); } });
     window.__closeDrawer = closeAll;
 
-    /* ════════════════════════════════════════
-       ADD ROOM — mode Création
-    ════════════════════════════════════════ */
+    /* ════════════════════════════
+       ADD ROOM — Création
+    ════════════════════════════ */
     function openAddRoomCreate() {
         const form = document.getElementById('addRoomForm');
         form.action = "{{ route('rooms.store') }}";
@@ -655,7 +649,7 @@
         document.getElementById('addRoomTitle').textContent   = 'Nouvelle salle';
         document.getElementById('addRoomSubmitLabel').textContent = 'Créer la salle';
         document.getElementById('roomFieldName').value        = '';
-        document.getElementById('roomFieldType').value        = 'standard'; // ✅ défaut = standard
+        document.getElementById('roomFieldType').value        = 'standard';
         document.getElementById('roomFieldCapacity').value    = '';
         document.getElementById('roomFieldPrix').value        = '';
         document.getElementById('roomFieldLocation').value    = '';
@@ -664,9 +658,9 @@
         openDrawer(addRoomDrawer);
     }
 
-    /* ════════════════════════════════════════
-       ADD ROOM — mode Édition (pré-remplissage type)
-    ════════════════════════════════════════ */
+    /* ════════════════════════════
+       ADD ROOM — Édition
+    ════════════════════════════ */
     function openEditRoom(d) {
         const form = document.getElementById('addRoomForm');
         form.action = d.editUrl;
@@ -675,7 +669,7 @@
         document.getElementById('addRoomTitle').textContent   = d.name;
         document.getElementById('addRoomSubmitLabel').textContent = 'Enregistrer les modifications';
         document.getElementById('roomFieldName').value        = d.name        || '';
-        document.getElementById('roomFieldType').value        = d.type        || 'standard'; // ✅ pré-rempli
+        document.getElementById('roomFieldType').value        = d.type        || 'standard';
         document.getElementById('roomFieldCapacity').value    = d.capacity    || '';
         document.getElementById('roomFieldPrix').value        = d.prix        || '';
         document.getElementById('roomFieldLocation').value    = d.location    || '';
@@ -690,9 +684,9 @@
         const p = document.getElementById('addRoomPreview'); p.src = URL.createObjectURL(file); p.style.display='block';
     });
 
-    /* ════════════════════════════════════════
-       ADD USER DRAWER
-    ════════════════════════════════════════ */
+    /* ════════════════════════════
+       ADD USER
+    ════════════════════════════ */
     document.getElementById('btnOpenAddUser').addEventListener('click', () => openDrawer(addUserDrawer));
 
     @if($errors->hasAny(['user_name','user_email','user_password','user_role']))
@@ -703,9 +697,9 @@
     document.addEventListener('DOMContentLoaded', () => { document.querySelector('[data-panel="rooms"]')?.click(); openAddRoomCreate(); });
     @endif
 
-    /* ════════════════════════════════════════
+    /* ════════════════════════════
        HELPERS
-    ════════════════════════════════════════ */
+    ════════════════════════════ */
     function field(label, value, muted=false) {
         return `<div class="drawer-field"><span class="drawer-field__label">${label}</span><div class="drawer-field__val ${muted?'muted':''}">${value||'—'}</div></div>`;
     }
@@ -714,16 +708,16 @@
 
     const typeLabelsJS = {
         standard:   '⭐ Standard',
-        mariage:    '✨ mariage',
         premium:    '✨ Premium',
         vip:        '👑 VIP',
         conference: '🎤 Conférence',
         coworking:  '💼 Coworking',
+        mariage:    '💒 Mariage',
     };
 
-    /* ════════════════════════════════════════
+    /* ════════════════════════════
        USER ROWS
-    ════════════════════════════════════════ */
+    ════════════════════════════ */
     document.querySelectorAll('.user-row').forEach(row => {
         row.addEventListener('click', function () {
             const d = this.dataset;
@@ -768,9 +762,9 @@
         });
     });
 
-    /* ════════════════════════════════════════
+    /* ════════════════════════════
        ROOM ROWS
-    ════════════════════════════════════════ */
+    ════════════════════════════ */
     document.querySelectorAll('.room-row').forEach(row => {
         row.addEventListener('click', function () {
             const d = this.dataset;
@@ -813,9 +807,9 @@
         });
     });
 
-    /* ════════════════════════════════════════
+    /* ════════════════════════════
        RESERVATION ROWS
-    ════════════════════════════════════════ */
+    ════════════════════════════ */
     document.querySelectorAll('.resv-row').forEach(row => {
         row.addEventListener('click', function () {
             const d = this.dataset;

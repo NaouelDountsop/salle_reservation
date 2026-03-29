@@ -12,15 +12,26 @@ class AdminMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * Règles :
+     *  1. Non connecté        → redirige vers /login
+     *  2. Connecté, pas admin → redirige vers l'accueil avec message d'erreur
+     *  3. Admin confirmé      → accès accordé
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::check() || Auth::user()->role !== 'admin') {
-            abort(403, 'Accès interdit');
+        // 1. Pas connecté
+        if (!Auth::check()) {
+            return redirect()->route('login');
         }
 
+        // 2. Connecté mais pas admin
+        if (Auth::user()->role !== 'admin') {
+            return redirect()
+                ->route('rooms.index')
+                ->with('error', 'Accès refusé. Cette zone est réservée aux administrateurs.');
+        }
+
+        // 3. Admin confirmé → on laisse passer
         return $next($request);
     }
-       
 }
