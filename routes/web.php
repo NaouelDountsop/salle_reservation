@@ -3,6 +3,8 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\ReservationController;
+// ✅ Cette ligne DOIT être présente en haut de routes/web.php
+use App\Http\Controllers\AdminController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,36 +24,48 @@ use App\Http\Controllers\ReservationController;
 // });
 
 
-Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+/* ── Auth ── */
+Route::get('/register',  [AuthController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+Route::get('/login',     [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login',    [AuthController::class, 'login'])->name('login.post');
 
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('/logout',   [AuthController::class, 'logout'])->name('logout');
 
+/* ── Page d'accueil ── */
+Route::get('/', function () {
+    return redirect()->route('rooms.index');
+});
+
+/* ── Salles (resource complet) ── */
 Route::resource('rooms', RoomController::class);
 
-
-
-//  IMPORTANT : on surcharge uniquement la route create avec paramètre
+/* ── Réservations ── */
 Route::get('reservations/create/{room}', [ReservationController::class, 'create'])
     ->name('reservations.create');
 
-// Autres routes REST
 Route::resource('reservations', ReservationController::class)
     ->except(['create']);
 
+/* ── Administration ── */
+Route::prefix('admin')
+    ->middleware(['auth', 'admin'])
+    ->name('admin.')
+    ->group(function () {
 
-    Route::get('/', function () {
-        auth()->logout(); // force logout
-        return view('welcome');
-    });
+        // Dashboard
+        Route::get('/dashboard', [AdminController::class, 'dashboard'])
+            ->name('dashboard');
 
-    Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
-        Route::get('/dashboard', [App\Http\Controllers\AdminController::class, 'dashboard'])
-            ->name('admin.dashboard');
-            
-    Route::delete('/users/{id}', [App\Http\Controllers\AdminController::class, 'destroyUser'])
-                ->name('admin.users.destroy');
+        // Utilisateurs
+        Route::post('/users',         [AdminController::class, 'storeUser'])
+            ->name('users.store');
+
+        Route::delete('/users/{id}',  [AdminController::class, 'destroyUser'])
+            ->name('users.destroy');
+
+        // Salles (modification via admin)
+        Route::put('/rooms/{room}',   [AdminController::class, 'updateRoom'])
+            ->name('rooms.update');
     });
