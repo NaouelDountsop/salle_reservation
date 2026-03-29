@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 <style>
 
+
 </style>
 </head>
 
@@ -51,42 +52,22 @@
         <nav class="sidebar-nav">
             <span class="sidebar-nav__label">Vue générale</span>
             <button class="sidebar-nav__link active" data-panel="dashboard">
-                <svg viewBox="0 0 24 24">
-                    <rect x="3" y="3" width="7" height="7" rx="1"/>
-                    <rect x="14" y="3" width="7" height="7" rx="1"/>
-                    <rect x="14" y="14" width="7" height="7" rx="1"/>
-                    <rect x="3" y="14" width="7" height="7" rx="1"/>
-                </svg>
+                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
                 Tableau de bord
             </button>
-
             <span class="sidebar-nav__label">Gestion</span>
-
             <button class="sidebar-nav__link" data-panel="rooms">
-                <svg viewBox="0 0 24 24">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                    <polyline points="9 22 9 12 15 12 15 22"/>
-                </svg>
+                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                 Salles
                 <span class="sidebar-nav__count">{{ $totalRooms }}</span>
             </button>
-
             <button class="sidebar-nav__link" data-panel="reservations">
-                <svg viewBox="0 0 24 24">
-                    <rect x="3" y="4" width="18" height="18" rx="2"/>
-                    <line x1="16" y1="2" x2="16" y2="6"/>
-                    <line x1="8" y1="2" x2="8" y2="6"/>
-                    <line x1="3" y1="10" x2="21" y2="10"/>
-                </svg>
+                <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                 Réservations
                 <span class="sidebar-nav__count">{{ $totalReservations }}</span>
             </button>
-
             <button class="sidebar-nav__link" data-panel="users">
-                <svg viewBox="0 0 24 24">
-                    <circle cx="12" cy="8" r="4"/>
-                    <path d="M20 21a8 8 0 1 0-16 0"/>
-                </svg>
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
                 Utilisateurs
                 <span class="sidebar-nav__count">{{ $totalUsers }}</span>
             </button>
@@ -105,18 +86,13 @@
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="sidebar-logout" title="Se déconnecter">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                            <polyline points="16 17 21 12 16 7"/>
-                            <line x1="21" y1="12" x2="9" y2="12"/>
-                        </svg>
+                        <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                     </button>
                 </form>
             </div>
             @endauth
         </div>
     </aside>
-
 
     {{-- ══ ZONE PRINCIPALE ══ --}}
     <div class="admin-main">
@@ -234,15 +210,15 @@
                     </div>
                     <button class="btn-add-room" id="btnOpenAddRoom">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-                            <line x1="12" y1="5" x2="12" y2="19"/>
-                            <line x1="5" y1="12" x2="19" y2="12"/>
+                            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
                         </svg>
                         <span>Ajouter une salle</span>
                     </button>
                 </div>
                 <div class="admin-table-wrap">
                     <table class="admin-table">
-                        <thead><tr><th>Salle</th><th>Localisation</th><th>Capacité</th><th>Prix</th><th>Statut</th><th></th></tr></thead>
+                        {{-- ✅ Colonne Type ajoutée --}}
+                        <thead><tr><th>Salle</th><th>Type</th><th>Localisation</th><th>Capacité</th><th>Prix</th><th>Statut</th><th></th></tr></thead>
                         <tbody>
                             @foreach($rooms as $room)
                             @php
@@ -253,10 +229,22 @@
                                     $e = \Carbon\Carbon::parse($r->end_time);
                                     return now()->between($s, $e);
                                 })->count() > 0;
+
+                                $typeLabels = [
+                                    'standard'   => ['⭐', 'Standard'],
+                                    'premium'    => ['✨', 'Premium'],
+                                    'vip'        => ['👑', 'VIP'],
+                                    'conference' => ['🎤', 'Conférence'],
+                                    'coworking'  => ['💼', 'Coworking'],
+                                    'mariage'  => ['💼', 'mariage'],
+                                ];
+                                $roomType  = $room->type ?? 'standard';
+                                $typeInfo  = $typeLabels[$roomType] ?? ['⭐', ucfirst($roomType)];
                             @endphp
                             <tr class="room-row"
                                 data-id="{{ $room->id }}"
                                 data-name="{{ $room->name }}"
+                                data-type="{{ $roomType }}"
                                 data-location="{{ $room->location ?? '' }}"
                                 data-capacity="{{ $room->capacity ?? '' }}"
                                 data-prix="{{ $room->prix ?? '' }}"
@@ -266,13 +254,15 @@
                                 data-status="{{ $isOccupied ? 'taken' : 'free' }}"
                                 data-next="{{ $nextResv ? \Carbon\Carbon::parse($nextResv->start_time)->format('d/m/Y H:i') : '' }}"
                                 data-next-user="{{ $nextResv ? ($nextResv->user->name ?? '—') : '' }}"
-                                data-edit-url="{{ route('rooms.update', $room->id) }}">
+                                data-edit-url="{{ route('admin.rooms.update', $room->id) }}">
                                 <td>
                                     <div class="tbl-user">
                                         <div class="tbl-avatar" style="border-radius:8px;background:var(--stone-2);color:var(--ink-40);font-size:16px;">🏢</div>
                                         <div class="tbl-name">{{ $room->name }}</div>
                                     </div>
                                 </td>
+                                {{-- ✅ Badge type --}}
+                                <td><span class="type-badge type-badge--{{ $roomType }}">{{ $typeInfo[0] }} {{ $typeInfo[1] }}</span></td>
                                 <td style="color:var(--ink-40);font-size:12px;">📍 {{ $room->location ?? '—' }}</td>
                                 <td style="font-size:13px;color:var(--ink);">@if($room->capacity) 👥 {{ $room->capacity }} places @else — @endif</td>
                                 <td style="font-size:13px;color:var(--ink);">@if($room->prix) {{ number_format($room->prix, 0, ',', ' ') }} FCFA @else — @endif</td>
@@ -353,15 +343,12 @@
                 <div class="panel-header">
                     <div>
                         <div class="panel-title">Utilisateurs</div>
-                        <div class="panel-subtitle">{{ $totalUsers }} comptes enregistrés — cliquez sur une ligne pour les détails</div>
+                        <div class="panel-subtitle">{{ $totalUsers }} comptes enregistrés</div>
                     </div>
-                    {{-- ✅ BOUTON AJOUTER UN UTILISATEUR --}}
                     <button class="btn-add-user" id="btnOpenAddUser">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-                            <circle cx="12" cy="8" r="4"/>
-                            <path d="M20 21a8 8 0 1 0-16 0"/>
-                            <line x1="19" y1="11" x2="19" y2="17"/>
-                            <line x1="16" y1="14" x2="22" y2="14"/>
+                            <circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/>
+                            <line x1="19" y1="11" x2="19" y2="17"/><line x1="16" y1="14" x2="22" y2="14"/>
                         </svg>
                         <span>Ajouter un utilisateur</span>
                     </button>
@@ -432,7 +419,7 @@
 </div>
 
 
-{{-- ══ ADD ROOM DRAWER ══ --}}
+{{-- ══ ADD / EDIT ROOM DRAWER ══ --}}
 <div class="detail-drawer" id="addRoomDrawer">
     <div class="drawer-header">
         <button class="drawer-close" id="addRoomClose">&times;</button>
@@ -443,7 +430,6 @@
           enctype="multipart/form-data"
           style="display:flex;flex-direction:column;flex:1;overflow:hidden;">
         @csrf
-        {{-- champ caché pour PUT (modification) --}}
         <input type="hidden" name="_method" id="addRoomMethod" value="POST">
 
         <div class="drawer-body" style="display:flex;flex-direction:column;gap:16px;">
@@ -456,28 +442,45 @@
 
             <div class="form-group">
                 <label>Nom de la salle *</label>
-                <input type="text" name="name" id="roomFieldName" value="{{ old('name') }}" placeholder="ex: Salle Einstein" required>
+                <input type="text" name="name" id="roomFieldName"
+                       value="{{ old('name') }}" placeholder="ex: Salle Einstein" required>
+            </div>
+
+            {{-- ✅ SELECT TYPE avec valeur par défaut "standard" --}}
+            <div class="form-group">
+                <label>Type de salle *</label>
+                <select name="type" id="roomFieldType" required>
+                    <option value="standard"   id="typeOpt_standard">⭐ Standard</option>
+                    <option value="premium"    id="typeOpt_premium">✨ Premium</option>
+                    <option value="vip"        id="typeOpt_vip">👑 mariage</option>
+                    <option value="conference" id="typeOpt_conference">🎤 Conférence</option>
+                    <option value="coworking"  id="typeOpt_coworking">💼 Coworking</option>
+                </select>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label>Capacité *</label>
-                    <input type="number" name="capacity" id="roomFieldCapacity" value="{{ old('capacity') }}" placeholder="ex: 12" min="1" required>
+                    <input type="number" name="capacity" id="roomFieldCapacity"
+                           value="{{ old('capacity') }}" placeholder="ex: 12" min="1" required>
                 </div>
                 <div class="form-group">
-                    <label>Prix (FCFA) *</label>
-                    <input type="number" name="prix" id="roomFieldPrix" value="{{ old('prix') }}" placeholder="ex: 15000" step="0.01" min="0" required>
+                    <label>Prix/h (FCFA) *</label>
+                    <input type="number" name="prix" id="roomFieldPrix"
+                           value="{{ old('prix') }}" placeholder="ex: 15000" step="0.01" min="0" required>
                 </div>
             </div>
 
             <div class="form-group">
                 <label>Localisation</label>
-                <input type="text" name="location" id="roomFieldLocation" value="{{ old('location') }}" placeholder="ex: Bâtiment A, 2ème étage">
+                <input type="text" name="location" id="roomFieldLocation"
+                       value="{{ old('location') }}" placeholder="ex: Bâtiment A, 2ème étage">
             </div>
 
             <div class="form-group">
                 <label>Description</label>
-                <textarea name="description" id="roomFieldDescription" placeholder="Équipements, caractéristiques particulières...">{{ old('description') }}</textarea>
+                <textarea name="description" id="roomFieldDescription"
+                          placeholder="Équipements, caractéristiques particulières...">{{ old('description') }}</textarea>
             </div>
 
             <div class="drawer-divider"></div>
@@ -499,7 +502,7 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                 Annuler
             </button>
-            <button type="submit" class="btn-drawer btn-drawer--primary" id="addRoomSubmit">
+            <button type="submit" class="btn-drawer btn-drawer--primary">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
                 <span id="addRoomSubmitLabel">Créer la salle</span>
             </button>
@@ -535,12 +538,10 @@
                 <label>Nom complet *</label>
                 <input type="text" name="user_name" value="{{ old('user_name') }}" placeholder="ex: Jean Dupont" required>
             </div>
-
             <div class="form-group">
                 <label>Adresse email *</label>
                 <input type="email" name="user_email" value="{{ old('user_email') }}" placeholder="ex: jean@exemple.com" required>
             </div>
-
             <div class="form-row">
                 <div class="form-group">
                     <label>Mot de passe *</label>
@@ -551,11 +552,10 @@
                     <input type="password" name="user_password_confirmation" placeholder="Répéter" required>
                 </div>
             </div>
-
             <div class="form-group">
                 <label>Rôle *</label>
                 <select name="user_role" required>
-                    <option value="user" {{ old('user_role','user')==='user' ? 'selected' : '' }}>👤 Utilisateur</option>
+                    <option value="user"  {{ old('user_role','user')==='user'  ? 'selected' : '' }}>👤 Utilisateur</option>
                     <option value="admin" {{ old('user_role')==='admin' ? 'selected' : '' }}>⚡ Administrateur</option>
                 </select>
             </div>
@@ -594,39 +594,23 @@
     const sidebar    = document.getElementById('adminSidebar');
     const sidebarOvl = document.getElementById('sidebarOverlay');
 
-    function openSidebar() {
-        sidebar.classList.add('is-open');
-        sidebarOvl.classList.add('open');
-        hamburger.classList.add('is-open');
-        hamburger.setAttribute('aria-expanded', 'true');
-        document.body.style.overflow = 'hidden';
-    }
-    function closeSidebar() {
-        sidebar.classList.remove('is-open');
-        sidebarOvl.classList.remove('open');
-        hamburger.classList.remove('is-open');
-        hamburger.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
-    }
+    function openSidebar() { sidebar.classList.add('is-open'); sidebarOvl.classList.add('open'); hamburger.classList.add('is-open'); hamburger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
+    function closeSidebar() { sidebar.classList.remove('is-open'); sidebarOvl.classList.remove('open'); hamburger.classList.remove('is-open'); hamburger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
+
     hamburger.addEventListener('click', () => sidebar.classList.contains('is-open') ? closeSidebar() : openSidebar());
     sidebarOvl.addEventListener('click', closeSidebar);
-    sidebar.querySelectorAll('[data-panel]').forEach(btn => {
-        btn.addEventListener('click', () => { if (window.innerWidth <= 900) closeSidebar(); });
-    });
+    sidebar.querySelectorAll('[data-panel]').forEach(btn => btn.addEventListener('click', () => { if (window.innerWidth <= 900) closeSidebar(); }));
 
     /* ════════════════════════════════════════
        DATE
     ════════════════════════════════════════ */
     const dateEl = document.getElementById('adminDate');
-    if (dateEl) dateEl.textContent = new Date().toLocaleDateString('fr-FR', {
-        weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
-    });
+    if (dateEl) dateEl.textContent = new Date().toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
 
     /* ════════════════════════════════════════
        NAVIGATION PANELS
     ════════════════════════════════════════ */
     const panelLabels = { dashboard:'Tableau de bord', rooms:'Salles', reservations:'Réservations', users:'Utilisateurs' };
-
     document.querySelectorAll('[data-panel]').forEach(btn => {
         btn.addEventListener('click', function () {
             document.querySelectorAll('[data-panel]').forEach(b => b.classList.remove('active'));
@@ -634,31 +618,22 @@
             this.classList.add('active');
             document.getElementById('panel-' + this.dataset.panel)?.classList.add('active');
             const label = panelLabels[this.dataset.panel] || '';
-            const bc = document.getElementById('breadcrumb');
-            if (bc) bc.textContent = label;
-            const mbc = document.getElementById('mobileBreadcrumb');
-            if (mbc) mbc.textContent = label;
+            const bc = document.getElementById('breadcrumb'); if (bc) bc.textContent = label;
+            const mbc = document.getElementById('mobileBreadcrumb'); if (mbc) mbc.textContent = label;
         });
     });
 
-    //    DRAWERS — registre central
-    
+    /* ════════════════════════════════════════
+       DRAWERS
+    ════════════════════════════════════════ */
     const overlay       = document.getElementById('detailOverlay');
     const detailDrawer  = document.getElementById('detailDrawer');
     const addRoomDrawer = document.getElementById('addRoomDrawer');
     const addUserDrawer = document.getElementById('addUserDrawer');
+    const allDrawers    = [detailDrawer, addRoomDrawer, addUserDrawer];
 
-    const allDrawers = [detailDrawer, addRoomDrawer, addUserDrawer];
-
-    function closeAll() {
-        overlay.classList.remove('open');
-        allDrawers.forEach(d => d.classList.remove('open'));
-    }
-    function openDrawer(drawer) {
-        allDrawers.forEach(d => d.classList.remove('open'));
-        overlay.classList.add('open');
-        drawer.classList.add('open');
-    }
+    function closeAll() { overlay.classList.remove('open'); allDrawers.forEach(d => d.classList.remove('open')); }
+    function openDrawer(d) { allDrawers.forEach(x => x.classList.remove('open')); overlay.classList.add('open'); d.classList.add('open'); }
 
     overlay.addEventListener('click', closeAll);
     document.getElementById('drawerClose').addEventListener('click', closeAll);
@@ -666,113 +641,100 @@
     document.getElementById('addRoomCancel').addEventListener('click', closeAll);
     document.getElementById('addUserClose').addEventListener('click', closeAll);
     document.getElementById('addUserCancel').addEventListener('click', closeAll);
-
     document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeSidebar(); closeAll(); } });
-
     window.__closeDrawer = closeAll;
 
-    
-    //    ADD ROOM — mode Création
-   
+    /* ════════════════════════════════════════
+       ADD ROOM — mode Création
+    ════════════════════════════════════════ */
     function openAddRoomCreate() {
         const form = document.getElementById('addRoomForm');
         form.action = "{{ route('rooms.store') }}";
-        document.getElementById('addRoomMethod').value = 'POST';
+        document.getElementById('addRoomMethod').value        = 'POST';
         document.getElementById('addRoomEyebrow').textContent = 'Gestion des salles';
         document.getElementById('addRoomTitle').textContent   = 'Nouvelle salle';
         document.getElementById('addRoomSubmitLabel').textContent = 'Créer la salle';
-        // Vider les champs
         document.getElementById('roomFieldName').value        = '';
+        document.getElementById('roomFieldType').value        = 'standard'; // ✅ défaut = standard
         document.getElementById('roomFieldCapacity').value    = '';
         document.getElementById('roomFieldPrix').value        = '';
         document.getElementById('roomFieldLocation').value    = '';
         document.getElementById('roomFieldDescription').value = '';
-        const preview = document.getElementById('addRoomPreview');
-        preview.style.display = 'none';
-        preview.src = '';
+        const prev = document.getElementById('addRoomPreview'); prev.style.display='none'; prev.src='';
         openDrawer(addRoomDrawer);
     }
 
-  
-    //    ADD ROOM — mode Édition
-   
+    /* ════════════════════════════════════════
+       ADD ROOM — mode Édition (pré-remplissage type)
+    ════════════════════════════════════════ */
     function openEditRoom(d) {
         const form = document.getElementById('addRoomForm');
         form.action = d.editUrl;
-        document.getElementById('addRoomMethod').value = 'PUT';
+        document.getElementById('addRoomMethod').value        = 'PUT';
         document.getElementById('addRoomEyebrow').textContent = 'Modifier la salle';
         document.getElementById('addRoomTitle').textContent   = d.name;
         document.getElementById('addRoomSubmitLabel').textContent = 'Enregistrer les modifications';
-        // Pré-remplir les champs
         document.getElementById('roomFieldName').value        = d.name        || '';
+        document.getElementById('roomFieldType').value        = d.type        || 'standard'; // ✅ pré-rempli
         document.getElementById('roomFieldCapacity').value    = d.capacity    || '';
         document.getElementById('roomFieldPrix').value        = d.prix        || '';
         document.getElementById('roomFieldLocation').value    = d.location    || '';
         document.getElementById('roomFieldDescription').value = d.description || '';
-        const preview = document.getElementById('addRoomPreview');
-        preview.style.display = 'none';
-        preview.src = '';
+        const prev = document.getElementById('addRoomPreview'); prev.style.display='none'; prev.src='';
         openDrawer(addRoomDrawer);
     }
 
     document.getElementById('btnOpenAddRoom').addEventListener('click', openAddRoomCreate);
-
-    /* Aperçu image */
     document.getElementById('addRoomImageInput').addEventListener('change', function () {
-        const file = this.files[0];
-        if (!file) return;
-        const preview = document.getElementById('addRoomPreview');
-        preview.src = URL.createObjectURL(file);
-        preview.style.display = 'block';
+        const file = this.files[0]; if (!file) return;
+        const p = document.getElementById('addRoomPreview'); p.src = URL.createObjectURL(file); p.style.display='block';
     });
 
-    
-    //    ADD USER DRAWER
-  
+    /* ════════════════════════════════════════
+       ADD USER DRAWER
+    ════════════════════════════════════════ */
     document.getElementById('btnOpenAddUser').addEventListener('click', () => openDrawer(addUserDrawer));
 
-    /* Réouverture si erreurs Laravel (add user) */
     @if($errors->hasAny(['user_name','user_email','user_password','user_role']))
-    document.addEventListener('DOMContentLoaded', () => {
-        document.querySelector('[data-panel="users"]')?.click();
-        openDrawer(addUserDrawer);
-    });
+    document.addEventListener('DOMContentLoaded', () => { document.querySelector('[data-panel="users"]')?.click(); openDrawer(addUserDrawer); });
     @endif
 
-    /* Réouverture si erreurs Laravel (add/edit room) */
-    @if($errors->hasAny(['name','capacity','prix','location','description']))
-    document.addEventListener('DOMContentLoaded', () => {
-        document.querySelector('[data-panel="rooms"]')?.click();
-        openAddRoomCreate();
-    });
+    @if($errors->hasAny(['name','capacity','prix','location','description','type']))
+    document.addEventListener('DOMContentLoaded', () => { document.querySelector('[data-panel="rooms"]')?.click(); openAddRoomCreate(); });
     @endif
 
-    
-    //    HELPERS
-
-    function field(label, value, muted = false) {
-        return `<div class="drawer-field">
-            <span class="drawer-field__label">${label}</span>
-            <div class="drawer-field__val ${muted ? 'muted' : ''}">${value || '—'}</div>
-        </div>`;
+    /* ════════════════════════════════════════
+       HELPERS
+    ════════════════════════════════════════ */
+    function field(label, value, muted=false) {
+        return `<div class="drawer-field"><span class="drawer-field__label">${label}</span><div class="drawer-field__val ${muted?'muted':''}">${value||'—'}</div></div>`;
     }
     function chip(text) { return `<span class="drawer-chip">${text}</span>`; }
     function statusBadge(type, label) { return `<span class="status-badge status-badge--${type}">${label}</span>`; }
 
- 
-    //    USER ROWS
-    
+    const typeLabelsJS = {
+        standard:   '⭐ Standard',
+        mariage:    '✨ mariage',
+        premium:    '✨ Premium',
+        vip:        '👑 VIP',
+        conference: '🎤 Conférence',
+        coworking:  '💼 Coworking',
+    };
+
+    /* ════════════════════════════════════════
+       USER ROWS
+    ════════════════════════════════════════ */
     document.querySelectorAll('.user-row').forEach(row => {
         row.addEventListener('click', function () {
-            const d        = this.dataset;
+            const d = this.dataset;
             const isAdmin  = d.role === 'admin';
-            const initials = d.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+            const initials = d.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
 
             document.getElementById('drawerEyebrow').textContent = 'Fiche utilisateur';
-            document.getElementById('drawerTitle').innerHTML     = `<div class="drawer-avatar-lg">${initials}</div>${d.name}`;
-            document.getElementById('drawerMeta').innerHTML      =
+            document.getElementById('drawerTitle').innerHTML = `<div class="drawer-avatar-lg">${initials}</div>${d.name}`;
+            document.getElementById('drawerMeta').innerHTML =
                 chip(isAdmin ? '⚡ Administrateur' : '👤 Utilisateur') +
-                chip(`📅 ${d.resvCount} réservation${d.resvCount > 1 ? 's' : ''}`);
+                chip(`📅 ${d.resvCount} réservation${d.resvCount>1?'s':''}`);
 
             document.getElementById('drawerBody').innerHTML =
                 field('Email', `<a href="mailto:${d.email}" style="color:var(--gold-dk);text-decoration:none;">${d.email}</a>`) +
@@ -782,9 +744,8 @@
                 '<div class="drawer-divider"></div>' +
                 field('ID', `#${d.id}`, true);
 
-            const actions   = document.getElementById('drawerActions');
+            const actions = document.getElementById('drawerActions');
             const deleteUrl = d.deleteUrl;
-
             actions.innerHTML = `
                 <button class="btn-drawer btn-drawer--secondary" onclick="window.__closeDrawer()">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -798,45 +759,43 @@
             const confirmBox = document.getElementById('deleteConfirm');
             document.getElementById('deleteConfirmText').textContent = `Supprimer "${d.name}" définitivement ?`;
             confirmBox.classList.remove('visible');
-
             document.getElementById('btnDeleteUser').addEventListener('click', () => confirmBox.classList.add('visible'));
-            document.getElementById('deleteConfirmYes').onclick = () => {
-                const form = document.getElementById('deleteUserForm');
-                form.action = deleteUrl;
-                form.submit();
-            };
-            document.getElementById('deleteConfirmNo').onclick = () => confirmBox.classList.remove('visible');
+            document.getElementById('deleteConfirmYes').onclick = () => { const f = document.getElementById('deleteUserForm'); f.action = deleteUrl; f.submit(); };
+            document.getElementById('deleteConfirmNo').onclick  = () => confirmBox.classList.remove('visible');
 
             openDrawer(detailDrawer);
             document.getElementById('deleteConfirm').classList.remove('visible');
         });
     });
 
-   
-    //    ROOM ROWS — fiche + bouton Modifier
-    
+    /* ════════════════════════════════════════
+       ROOM ROWS
+    ════════════════════════════════════════ */
     document.querySelectorAll('.room-row').forEach(row => {
         row.addEventListener('click', function () {
-            const d      = this.dataset;
-            const isFree = d.status === 'free';
+            const d = this.dataset;
+            const isFree  = d.status === 'free';
+            const typeLabel = typeLabelsJS[d.type] || d.type || 'Standard';
 
             document.getElementById('drawerEyebrow').textContent = 'Fiche salle';
             document.getElementById('drawerTitle').textContent   = d.name;
             document.getElementById('drawerMeta').innerHTML =
-                chip(`📍 ${d.location || '—'}`) +
+                chip(`📍 ${d.location||'—'}`) +
+                chip(typeLabel) +
                 chip(isFree ? '🟢 Libre' : '🔴 Occupée') +
                 (d.capacity ? chip(`👥 ${d.capacity} places`) : '') +
                 (d.prix ? chip(`💰 ${parseInt(d.prix).toLocaleString('fr-FR')} FCFA/h`) : '');
 
             document.getElementById('drawerBody').innerHTML =
-                field('Statut actuel', isFree ? statusBadge('free','Libre') : statusBadge('taken','Occupée')) +
+                field('Statut', isFree ? statusBadge('free','Libre') : statusBadge('taken','Occupée')) +
+                field('Type', typeLabel) +
                 field('Localisation', d.location) +
-                field('Capacité', d.capacity ? d.capacity + ' personnes' : '—') +
-                field('Prix horaire', d.prix ? parseInt(d.prix).toLocaleString('fr-FR') + ' FCFA' : '—') +
+                field('Capacité', d.capacity ? d.capacity+' personnes' : '—') +
+                field('Prix horaire', d.prix ? parseInt(d.prix).toLocaleString('fr-FR')+' FCFA' : '—') +
                 field('Total réservations', d.resvCount) +
                 field('Réservations à venir', d.upcoming) +
                 (d.next ? field('Prochaine réservation', `${d.next} — par ${d.nextUser}`) : '') +
-                (d.description ? '<div class="drawer-divider"></div>' + field('Description', d.description, true) : '');
+                (d.description ? '<div class="drawer-divider"></div>'+field('Description', d.description, true) : '');
 
             document.getElementById('drawerActions').innerHTML = `
                 <button class="btn-drawer btn-drawer--secondary" onclick="window.__closeDrawer()">Fermer</button>
@@ -849,17 +808,14 @@
                 </button>`;
 
             document.getElementById('deleteConfirm').classList.remove('visible');
-
-            /* Bouton Modifier → ouvre le drawer d'édition pré-rempli */
             document.getElementById('btnEditRoom').addEventListener('click', () => openEditRoom(d));
-
             openDrawer(detailDrawer);
         });
     });
 
-  
-    //    RESERVATION ROWS
-   
+    /* ════════════════════════════════════════
+       RESERVATION ROWS
+    ════════════════════════════════════════ */
     document.querySelectorAll('.resv-row').forEach(row => {
         row.addEventListener('click', function () {
             const d = this.dataset;
@@ -869,11 +825,10 @@
             document.getElementById('drawerEyebrow').textContent = 'Détail réservation';
             document.getElementById('drawerTitle').textContent   = d.room;
             document.getElementById('drawerMeta').innerHTML =
-                chip(`👤 ${d.user}`) +
-                chip(`${d.status === 'past' ? '✅' : '📅'} ${sl}`);
+                chip(`👤 ${d.user}`) + chip(`${d.status==='past'?'✅':'📅'} ${sl}`);
 
             document.getElementById('drawerBody').innerHTML =
-                field('Statut', statusBadge(sc, sl)) +
+                field('Statut', statusBadge(sc,sl)) +
                 field('Salle', d.room) +
                 field('Localisation', d.location) +
                 '<div class="drawer-divider"></div>' +
@@ -888,7 +843,6 @@
             document.getElementById('drawerActions').innerHTML =
                 `<button class="btn-drawer btn-drawer--secondary" onclick="window.__closeDrawer()">Fermer</button>`;
             document.getElementById('deleteConfirm').classList.remove('visible');
-
             openDrawer(detailDrawer);
         });
     });

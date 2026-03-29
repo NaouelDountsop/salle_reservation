@@ -73,6 +73,7 @@ class RoomController extends Controller
 
     $request->validate([
         'name' => 'required|string|max:255',
+        'type' => 'nullable|string|in:standard,premium,vip,conference,coworking',
         'capacity' => 'required|integer',
         'location' => 'nullable|string|max:255',
         'description' => 'nullable|string',

@@ -75,6 +75,7 @@ class AdminController extends Controller
     {
         $request->validate([
             'name'        => 'required|string|max:255',
+            'type' => 'nullable|string|in:standard,premium,vip,conference,coworking',
             'capacity'    => 'required|integer|min:1',
             'prix'        => 'required|numeric|min:0',
             'location'    => 'nullable|string|max:255',
@@ -82,7 +83,7 @@ class AdminController extends Controller
             'image'       => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
         ]);
 
-        $data = $request->only(['name', 'capacity', 'prix', 'location', 'description']);
+        $data = $request->only(['name' , 'capacity', 'prix', 'location', 'description','type']);
 
         if ($request->hasFile('image')) {
             if ($room->image) {
