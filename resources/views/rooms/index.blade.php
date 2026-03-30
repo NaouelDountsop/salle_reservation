@@ -81,11 +81,8 @@
             </div>
         </div>
 
-        {{-- ══ Bouton Admin topbar — visible par tous ══ --}}
-       
         @auth
             @if(auth()->user()->role === 'admin')
-                {{-- Admin confirmé → accès direct --}}
                 <a href="{{ route('admin.dashboard') }}" class="btn-admin">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
                         <circle cx="12" cy="8" r="3"/>
@@ -95,7 +92,6 @@
                     Admin
                 </a>
             @else
-                {{-- Connecté mais pas admin → redirige vers login avec message --}}
                 <a href="{{ route('login') }}?unauthorized=1" class="btn-admin btn-admin--locked" title="Accès réservé aux administrateurs">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
                         <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
@@ -105,7 +101,6 @@
                 </a>
             @endif
         @else
-            {{-- Non connecté → redirige vers login --}}
             <a href="{{ route('login') }}" class="btn-admin btn-admin--locked" title="Connectez-vous pour accéder à l'administration">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
                     <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
@@ -115,7 +110,6 @@
             </a>
         @endauth
 
-        {{-- Utilisateur connecté --}}
         @auth
         <div class="user-pill" id="userPill">
             <div class="user-pill__avatar">
@@ -190,7 +184,7 @@
 </header>
 
 
-{{-- ══ BANNIÈRE ADMIN — visible par tous ══ --}}
+{{-- ══ BANNIÈRE ADMIN ══ --}}
 <div class="admin-banner">
     <div class="admin-banner__inner">
         <div class="admin-banner__left">
@@ -217,7 +211,6 @@
             </div>
         </div>
 
-        {{-- Lien conditionnel selon le statut --}}
         @auth
             @if(auth()->user()->role === 'admin')
                 <a href="{{ route('admin.dashboard') }}" class="admin-banner__btn">
@@ -233,7 +226,6 @@
                     </svg>
                 </a>
             @else
-                {{-- Connecté mais pas admin → login avec flag --}}
                 <a href="{{ route('login') }}?unauthorized=1" class="admin-banner__btn admin-banner__btn--locked">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
                         <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
@@ -246,7 +238,6 @@
                 </a>
             @endif
         @else
-            {{-- Non connecté → login --}}
             <a href="{{ route('login') }}" class="admin-banner__btn admin-banner__btn--locked">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
                     <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
@@ -298,8 +289,22 @@
              data-location="{{ $room->location }}">
 
             <div class="pin-image-container">
+
+                {{-- ✅ BLOC IMAGE MIS À JOUR — fonctionne en local ET sur Laravel Cloud --}}
                 @if($room->image)
-                    <img src="{{ asset('storage/' . $room->image) }}" alt="{{ $room->name }}" loading="lazy" class="pin-image">
+                    @if(str_starts_with($room->image, 'data:'))
+                        {{-- Production : image stockée en base64 --}}
+                        <img src="{{ $room->image }}"
+                             alt="{{ $room->name }}"
+                             loading="lazy"
+                             class="pin-image">
+                    @else
+                        {{-- Local : image stockée dans storage/public --}}
+                        <img src="{{ asset('storage/' . $room->image) }}"
+                             alt="{{ $room->name }}"
+                             loading="lazy"
+                             class="pin-image">
+                    @endif
                 @else
                     <div class="pin-placeholder">🏠</div>
                 @endif
@@ -470,7 +475,6 @@
 (function () {
     'use strict';
 
-    /* ── Éléments du modal ── */
     const modal            = document.getElementById('reservationModal');
     const closeBtn         = modal.querySelector('.close-modal');
     const modalIdInput     = document.getElementById('modalRoomId');
