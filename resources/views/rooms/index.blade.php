@@ -82,7 +82,7 @@
         </div>
 
         {{-- ══ Bouton Admin topbar — visible par tous ══ --}}
-        {{-- Redirige vers login si non connecté, vers login si connecté mais pas admin, vers dashboard si admin --}}
+       
         @auth
             @if(auth()->user()->role === 'admin')
                 {{-- Admin confirmé → accès direct --}}

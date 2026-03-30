@@ -91,6 +91,14 @@
                 </div>
 
                 <div class="auth-field">
+    <label for="role">Rôle</label>
+    <select id="role" name="role" required>
+        <option value="user">user</option>
+        <option value="admin">admin</option>
+    </select>
+</div>
+
+                <div class="auth-field">
                     <label for="password">Mot de passe</label>
                     <input
                         type="password"
