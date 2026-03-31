@@ -1,5 +1,12 @@
-
-<link rel="stylesheet" href="{{ asset('css/style.css') }}">
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EspaceIdées — Mes réservations</title>
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+</head>
+<body>
 
 {{-- ══ TOAST ══ --}}
 @if(session('success'))
@@ -224,16 +231,13 @@
                     $dow = $dowLabels[$start->dayOfWeek];
                 @endphp
 
-                {{-- ══ CARTE (5 zones : stripe / image / header / body / footer) ══ --}}
                 <div class="resv-card {{ $isPast ? 'resv-card--past' : 'resv-card--upcoming' }}"
                      data-status="{{ $isPast ? 'past' : 'upcoming' }}"
                      data-start="{{ $start->timestamp }}"
                      data-room="{{ $reservation->room->name ?? '' }}">
 
-                    {{-- 1. STRIPE --}}
                     <div class="resv-card__stripe"></div>
 
-                    {{-- 2. IMAGE --}}
                     <div class="resv-card__image">
                         @if($reservation->room && $reservation->room->image)
                             <img src="{{ asset('storage/' . $reservation->room->image) }}"
@@ -243,9 +247,7 @@
                         @endif
                     </div>
 
-                    {{-- 3. HEADER SOMBRE --}}
                     <div class="resv-card__header">
-
                         <div class="resv-card__header-row">
                             <div class="resv-card__date">
                                 <span class="resv-card__dow">{{ $dow }}</span>
@@ -262,7 +264,6 @@
                                 <span class="resv-badge resv-badge--past">Terminée</span>
                             @endif
                         </div>
-
                         <h3 class="resv-card__room">{{ $reservation->room->name ?? 'Salle inconnue' }}</h3>
                         <p class="resv-card__loc">
                             📍 {{ $reservation->room->location ?? '—' }}
@@ -270,18 +271,14 @@
                                 · {{ $reservation->room->capacity }} places
                             @endif
                         </p>
+                    </div>
 
-                    </div>{{-- /resv-card__header --}}
-
-                    {{-- 4. BODY — horaires --}}
                     <div class="resv-card__body">
                         <div class="resv-card__times">
-
                             <div class="resv-tblock">
                                 <span class="resv-tblock__lbl">Début</span>
                                 <span class="resv-tblock__val">{{ $start->format('H:i') }}</span>
                             </div>
-
                             <div class="resv-ttrack {{ $isPast ? 'resv-ttrack--past' : '' }}">
                                 <svg viewBox="0 0 60 8" preserveAspectRatio="none" fill="none">
                                     <line x1="0" y1="4" x2="50" y2="4" stroke-width="1" stroke-dasharray="3 2"/>
@@ -289,18 +286,14 @@
                                 </svg>
                                 <span class="resv-dur {{ $isPast ? 'resv-dur--past' : '' }}">{{ $durationLabel }}</span>
                             </div>
-
                             <div class="resv-tblock">
                                 <span class="resv-tblock__lbl">Fin</span>
                                 <span class="resv-tblock__val">{{ $end->format('H:i') }}</span>
                             </div>
-
                         </div>
-                    </div>{{-- /resv-card__body --}}
+                    </div>
 
-                    {{-- 5. FOOTER — action --}}
                     <div class="resv-card__footer">
-
                         @if($countdown)
                             <span class="resv-countdown">{{ $countdown }}</span>
                         @elseif($reservation->room->capacity ?? false)
@@ -341,14 +334,12 @@
                                 Rebooker
                             </a>
                         @endif
+                    </div>
 
-                    </div>{{-- /resv-card__footer --}}
-
-                </div>{{-- /resv-card --}}
-
+                </div>
             @endforeach
 
-        </div>{{-- /resv-grid --}}
+        </div>
 
     @else
 
@@ -380,13 +371,7 @@
 
     @endif
 
-</div>{{-- /resv-page --}}
-
-
-{{-- ══ STYLES ══ --}}
-<style>
-
-</style>
+</div>
 
 
 {{-- ══ JS ══ --}}
@@ -489,3 +474,6 @@
 
 })();
 </script>
+
+</body>
+</html>

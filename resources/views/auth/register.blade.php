@@ -1,5 +1,12 @@
-
-<link rel="stylesheet" href="{{ asset('css/style.css') }}">
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EspaceIdées — Inscription</title>
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+</head>
+<body>
 
 <div class="auth-container">
 
@@ -19,7 +26,6 @@
     <div class="auth-right">
         <div class="auth-box">
 
-            {{-- Logo --}}
             <div class="auth-logo">
                 <div class="auth-logo__mark">
                     <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -27,17 +33,15 @@
                         <polyline points="9 22 9 12 15 12 15 22"/>
                     </svg>
                 </div>
-                <span class="auth-logo__name">SallesApp</span>
+                <span class="auth-logo__name">EspaceIdées</span>
             </div>
 
-            {{-- Titre --}}
             <div class="auth-heading">
                 <h2>Créer un compte.</h2>
                 <p>Remplissez les informations ci-dessous pour commencer.</p>
             </div>
             <div class="auth-divider"></div>
 
-            {{-- Erreurs de validation --}}
             @if($errors->any())
                 <div class="auth-error" role="alert">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
@@ -60,7 +64,6 @@
                 </div>
             @endif
 
-            {{-- Formulaire --}}
             <form method="POST" action="{{ route('register.post') }}" class="auth-form">
                 @csrf
 
@@ -91,12 +94,12 @@
                 </div>
 
                 <div class="auth-field">
-    <label for="role">Rôle</label>
-    <select id="role" name="role" required>
-        <option value="user">user</option>
-        <option value="admin">admin</option>
-    </select>
-</div>
+                    <label for="role">Rôle</label>
+                    <select id="role" name="role" required>
+                        <option value="user" {{ old('role', 'user') === 'user' ? 'selected' : '' }}>user</option>
+                        <option value="admin" {{ old('role') === 'admin' ? 'selected' : '' }}>admin</option>
+                    </select>
+                </div>
 
                 <div class="auth-field">
                     <label for="password">Mot de passe</label>
@@ -136,3 +139,6 @@
     </div>
 
 </div>
+
+</body>
+</html>

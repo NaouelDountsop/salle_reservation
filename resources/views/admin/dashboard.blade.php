@@ -259,7 +259,7 @@
                                 <td><span class="type-badge type-badge--{{ $roomType }}">{{ $typeInfo[0] }} {{ $typeInfo[1] }}</span></td>
                                 <td style="color:var(--ink-40);font-size:12px;">📍 {{ $room->location ?? '—' }}</td>
                                 <td style="font-size:13px;color:var(--ink);">@if($room->capacity) 👥 {{ $room->capacity }} places @else — @endif</td>
-                                <td style="font-size:13px;color:var(--ink);">@if($room->prix) {{ number_format($room->prix, 0, ',', ' ') }} FCFA @else — @endif</td>
+                                <td style="font-size:13px;color:var(--ink);">@if($room->prix) {{ number_format($room->prix, 0, ',', ' ') }} FCFA/H @else — @endif</td>
                                 <td>
                                     @if($isOccupied)
                                         <span class="status-badge status-badge--taken">Occupée</span>
@@ -459,7 +459,7 @@
                            value="{{ old('capacity') }}" placeholder="ex: 12" min="1" required>
                 </div>
                 <div class="form-group">
-                    <label>Prix/h (FCFA) *</label>
+                    <label>Prix/h (FCFA/H) *</label>
                     <input type="number" name="prix" id="roomFieldPrix"
                            value="{{ old('prix') }}" placeholder="ex: 15000" step="0.01" min="0" required>
                 </div>

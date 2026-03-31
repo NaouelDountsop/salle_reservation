@@ -1,4 +1,12 @@
-<link rel="stylesheet" href="{{ asset('css/style.css') }}">
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EspaceIdées — Salles</title>
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+</head>
+<body>
 
 {{-- ══ TOAST de confirmation ══ --}}
 @if(session('success'))
@@ -290,16 +298,13 @@
 
             <div class="pin-image-container">
 
-                {{-- ✅ BLOC IMAGE MIS À JOUR — fonctionne en local ET sur Laravel Cloud --}}
                 @if($room->image)
                     @if(str_starts_with($room->image, 'data:'))
-                        {{-- Production : image stockée en base64 --}}
                         <img src="{{ $room->image }}"
                              alt="{{ $room->name }}"
                              loading="lazy"
                              class="pin-image">
                     @else
-                        {{-- Local : image stockée dans storage/public --}}
                         <img src="{{ asset('storage/' . $room->image) }}"
                              alt="{{ $room->name }}"
                              loading="lazy"
@@ -736,3 +741,6 @@
 
 })();
 </script>
+
+</body>
+</html>
