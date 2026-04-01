@@ -93,13 +93,13 @@
                     >
                 </div>
 
-                <div class="auth-field">
+                <!-- <div class="auth-field">
                     <label for="role">Rôle</label>
                     <select id="role" name="role" required>
                         <option value="user" {{ old('role', 'user') === 'user' ? 'selected' : '' }}>user</option>
                         <option value="admin" {{ old('role') === 'admin' ? 'selected' : '' }}>admin</option>
                     </select>
-                </div>
+                </div> -->
 
                 <div class="auth-field">
                     <label for="password">Mot de passe</label>

@@ -19,7 +19,7 @@ class AdminSeeder extends Seeder
                 'role'     => 'admin',
                 'password' => Hash::make('12345678'),
             ]);
-            $this->command->info('✅ Admin mis à jour : admin@gmail.com');
+            $this->command->info(' Admin mis à jour : admin@gmail.com');
         } else{
             User::create([
                 'name'              => 'Admin2',
@@ -28,7 +28,7 @@ class AdminSeeder extends Seeder
                 'role'              => 'admin',
                 'email_verified_at' => now(),
             ]);
-            $this->command->info('✅ Admin créé : 12345678');
+            $this->command->info('Admin créé : 12345678');
         }
     }
 }
