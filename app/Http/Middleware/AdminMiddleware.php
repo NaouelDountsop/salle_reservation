@@ -12,19 +12,19 @@ class AdminMiddleware
     
     public function handle(Request $request, Closure $next): Response
     {
-        // 1. Pas connecté
+        
         if (!Auth::check()) {
             return redirect()->route('login');
         }
 
-        // 2. Connecté mais pas admin
+      
         if (Auth::user()->role !== 'admin') {
             return redirect()
                 ->route('rooms.index')
                 ->with('error', 'Accès refusé. Cette zone est réservée aux administrateurs.');
         }
 
-        // 3. Admin confirmé → on laisse passer
+        
         return $next($request);
     }
 }

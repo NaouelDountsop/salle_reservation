@@ -250,9 +250,9 @@
 
         {{-- Groupe : Capacité --}}
         <button class="filter-chip active" data-filter="all"    data-group="capacity">Toutes</button>
-        <button class="filter-chip"        data-filter="small"  data-group="capacity">Petites ≤6</button>
-        <button class="filter-chip"        data-filter="medium" data-group="capacity">Moyennes 6–15</button>
-        <button class="filter-chip"        data-filter="large"  data-group="capacity">Grandes 15+</button>
+        <button class="filter-chip"        data-filter="small"  data-group="capacity">Petites ≤100</button>
+        <button class="filter-chip"        data-filter="medium" data-group="capacity">Moyennes 100-200</button>
+        <button class="filter-chip"        data-filter="large"  data-group="capacity">Grandes 200+</button>
 
         {{-- Séparateur --}}
         <span style="width:1px;background:var(--stone);margin:4px 6px;flex-shrink:0;"></span>
@@ -485,9 +485,9 @@
 (function () {
     'use strict';
 
-    /* ════════════════════════════
+    /*
        FILTRES (capacité + type combinés)
-    ════════════════════════════ */
+     */
     const activeFilters = { capacity: 'all', type: 'all' };
 
     function applyFilters() {
@@ -499,9 +499,9 @@
             const type = card.dataset.type || 'standard';
 
             let showCap = true;
-            if (activeFilters.capacity === 'small')  showCap = cap <= 6;
-            if (activeFilters.capacity === 'medium') showCap = cap > 6 && cap <= 15;
-            if (activeFilters.capacity === 'large')  showCap = cap > 15;
+            if (activeFilters.capacity === 'small')  showCap = cap <= 100;
+            if (activeFilters.capacity === 'medium') showCap = cap > 100 && cap <= 200;
+            if (activeFilters.capacity === 'large')  showCap = cap > 200;
 
             const showType = activeFilters.type === 'all' || type === activeFilters.type;
 
