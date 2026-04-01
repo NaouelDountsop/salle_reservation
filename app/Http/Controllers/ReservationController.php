@@ -30,7 +30,7 @@ class ReservationController extends Controller
 
     public function store(Request $request)
     {
-        // 🚨 BLOQUER SI NON CONNECTÉ
+       
         if (!auth()->check()) {
             return redirect()->route('login')
                 ->with('error', 'Vous devez vous connecter pour réserver');

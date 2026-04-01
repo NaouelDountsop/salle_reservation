@@ -34,7 +34,6 @@
 
 {{-- ══ TOPBAR ══ --}}
 <nav class="site-topbar">
-
     <a href="{{ route('rooms.index') }}" class="topbar-logo">
         <div class="topbar-logo__mark">
             <svg viewBox="0 0 16 16"><path d="M3 8h10M8 3v10"/></svg>
@@ -44,30 +43,23 @@
 
     <div class="topbar-nav">
         <a href="{{ route('rooms.index') }}"
-           class="topbar-nav__link {{ request()->routeIs('rooms.index') ? 'active' : '' }}">
-           Salles
-        </a>
+           class="topbar-nav__link {{ request()->routeIs('rooms.index') ? 'active' : '' }}">Salles</a>
         @auth
         <a href="{{ route('reservations.index') }}"
-           class="topbar-nav__link {{ request()->routeIs('reservations.*') ? 'active' : '' }}">
-           Mes réservations
-        </a>
+           class="topbar-nav__link {{ request()->routeIs('reservations.*') ? 'active' : '' }}">Mes réservations</a>
         @endauth
         <a href="#" class="topbar-nav__link">Calendrier</a>
     </div>
 
     <div class="topbar-actions">
 
-        {{-- Cloche --}}
         <div class="notif-bell" id="notifBell" aria-label="Notifications">
             <svg class="notif-bell__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
                 <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
             </svg>
             @php $notifCount = session('notifications') ? count(session('notifications')) : 0; @endphp
-            @if($notifCount > 0)
-                <span class="notif-bell__badge">{{ $notifCount }}</span>
-            @endif
+            @if($notifCount > 0)<span class="notif-bell__badge">{{ $notifCount }}</span>@endif
             <div class="notif-panel" id="notifPanel" role="menu">
                 <div class="notif-panel__header">
                     <span class="notif-panel__title">Notifications</span>
@@ -100,7 +92,7 @@
                     Admin
                 </a>
             @else
-                <a href="{{ route('login') }}?unauthorized=1" class="btn-admin btn-admin--locked" title="Accès réservé aux administrateurs">
+                <a href="{{ route('login') }}?unauthorized=1" class="btn-admin btn-admin--locked">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
                         <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
                         <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
@@ -109,7 +101,7 @@
                 </a>
             @endif
         @else
-            <a href="{{ route('login') }}" class="btn-admin btn-admin--locked" title="Connectez-vous pour accéder à l'administration">
+            <a href="{{ route('login') }}" class="btn-admin btn-admin--locked">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
                     <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
                     <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
@@ -143,9 +135,7 @@
                     <li>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-                            <button type="submit" class="user-dropdown__link user-dropdown__logout">
-                                🚪 Se déconnecter
-                            </button>
+                            <button type="submit" class="user-dropdown__link user-dropdown__logout">🚪 Se déconnecter</button>
                         </form>
                     </li>
                 </ul>
@@ -169,9 +159,7 @@
             <span class="site-hero__title-line">L'espace</span>
             <em class="site-hero__title-accent">de vos idées</em>
         </h1>
-        <p class="site-hero__sub">
-            Trouvez et réservez la salle parfaite pour vos réunions, workshops et événements.
-        </p>
+        <p class="site-hero__sub">Trouvez et réservez la salle parfaite pour vos réunions, workshops et événements.</p>
     </div>
     <div class="site-hero__stats">
         <div class="hero-stat">
@@ -218,15 +206,12 @@
                 @endauth
             </div>
         </div>
-
         @auth
             @if(auth()->user()->role === 'admin')
                 <a href="{{ route('admin.dashboard') }}" class="admin-banner__btn">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                        <rect x="3" y="3" width="7" height="7" rx="1"/>
-                        <rect x="14" y="3" width="7" height="7" rx="1"/>
-                        <rect x="3" y="14" width="7" height="7" rx="1"/>
-                        <rect x="14" y="14" width="7" height="7" rx="1"/>
+                        <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+                        <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
                     </svg>
                     Tableau de bord Admin
                     <svg class="admin-banner__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
@@ -236,8 +221,7 @@
             @else
                 <a href="{{ route('login') }}?unauthorized=1" class="admin-banner__btn admin-banner__btn--locked">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                     </svg>
                     Accès restreint
                     <svg class="admin-banner__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
@@ -248,8 +232,7 @@
         @else
             <a href="{{ route('login') }}" class="admin-banner__btn admin-banner__btn--locked">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                 </svg>
                 Se connecter
                 <svg class="admin-banner__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
@@ -264,11 +247,25 @@
 {{-- ══ FILTRES ══ --}}
 <div class="filters-bar">
     <div class="filters-bar__left">
-        <button class="filter-chip active" data-filter="all">Toutes</button>
-        <button class="filter-chip" data-filter="small">Petites ≤6</button>
-        <button class="filter-chip" data-filter="medium">Moyennes 6–15</button>
-        <button class="filter-chip" data-filter="large">Grandes 15+</button>
-        <button class="filter-chip" data-filter="available">Disponibles</button>
+
+        {{-- Groupe : Capacité --}}
+        <button class="filter-chip active" data-filter="all"    data-group="capacity">Toutes</button>
+        <button class="filter-chip"        data-filter="small"  data-group="capacity">Petites ≤6</button>
+        <button class="filter-chip"        data-filter="medium" data-group="capacity">Moyennes 6–15</button>
+        <button class="filter-chip"        data-filter="large"  data-group="capacity">Grandes 15+</button>
+
+        {{-- Séparateur --}}
+        <span style="width:1px;background:var(--stone);margin:4px 6px;flex-shrink:0;"></span>
+
+        {{-- Groupe : Type --}}
+        <button class="filter-chip active"  data-filter="all"        data-group="type">Tous types</button>
+        <button class="filter-chip"         data-filter="standard"   data-group="type">⭐ Standard</button>
+        <button class="filter-chip"         data-filter="premium"    data-group="type">✨ Premium</button>
+        <button class="filter-chip"         data-filter="vip"        data-group="type">👑 VIP</button>
+        <button class="filter-chip"         data-filter="conference" data-group="type">🎤 Conférence</button>
+        <button class="filter-chip"         data-filter="coworking"  data-group="type">💼 Coworking</button>
+        <button class="filter-chip"         data-filter="mariage"    data-group="type">💒 Mariage</button>
+
     </div>
     <div class="filters-bar__right">
         <span class="sort-label">Trier par</span>
@@ -276,6 +273,7 @@
             <option value="name">Nom</option>
             <option value="capacity">Capacité</option>
             <option value="location">Étage</option>
+            <option value="type">Type</option>
         </select>
     </div>
 </div>
@@ -284,51 +282,56 @@
 {{-- ══ SECTION HEADER ══ --}}
 <div class="section-header">
     <span class="section-header__title">Salles disponibles</span>
-    <span class="section-header__count">{{ $rooms->count() }} salle{{ $rooms->count() > 1 ? 's' : '' }}</span>
+    <span class="section-header__count" id="roomCount">
+        {{ $rooms->count() }} salle{{ $rooms->count() > 1 ? 's' : '' }}
+    </span>
 </div>
 
 
 {{-- ══ GRILLE PINTEREST ══ --}}
 <div class="pinterest-grid">
     @foreach($rooms as $room)
+        @php
+            $roomType   = $room->type ?? 'standard';
+            $typeLabels = [
+                'standard'   => ['⭐', 'Standard'],
+                'premium'    => ['✨', 'Premium'],
+                'vip'        => ['👑', 'VIP'],
+                'conference' => ['🎤', 'Conférence'],
+                'coworking'  => ['💼', 'Coworking'],
+                'mariage'    => ['💒', 'Mariage'],
+            ];
+            $typeInfo = $typeLabels[$roomType] ?? ['⭐', ucfirst($roomType)];
+        @endphp
         <div class="pin-card"
              data-capacity="{{ $room->capacity }}"
              data-name="{{ $room->name }}"
-             data-location="{{ $room->location }}">
+             data-location="{{ $room->location }}"
+             data-type="{{ $roomType }}">
 
             <div class="pin-image-container">
 
                 @if($room->image)
                     @if(str_starts_with($room->image, 'data:'))
-                        <img src="{{ $room->image }}"
-                             alt="{{ $room->name }}"
-                             loading="lazy"
-                             class="pin-image">
+                        <img src="{{ $room->image }}" alt="{{ $room->name }}" loading="lazy" class="pin-image">
                     @else
-                        <img src="{{ asset('storage/' . $room->image) }}"
-                             alt="{{ $room->name }}"
-                             loading="lazy"
-                             class="pin-image">
+                        <img src="{{ asset('storage/' . $room->image) }}" alt="{{ $room->name }}" loading="lazy" class="pin-image">
                     @endif
                 @else
                     <div class="pin-placeholder">🏠</div>
                 @endif
 
-                @if($room->capacity >= 15)
-                    <span class="pin-ribbon">⭐ Grande salle</span>
-                @endif
+                {{-- Ruban type --}}
+                <span class="pin-ribbon">{{ $typeInfo[0] }} {{ $typeInfo[1] }}</span>
 
                 <div class="pin-overlay">
-                    <button
-                        type="button"
-                        class="pin-btn open-modal"
+                    <button type="button" class="pin-btn open-modal"
                         data-id="{{ $room->id }}"
                         data-name="{{ $room->name }}"
                         data-description="{{ $room->description ?? 'Pas de description disponible.' }}"
                         data-capacity="{{ $room->capacity }}"
                         data-location="{{ $room->location }}"
-                        data-price="{{ $room->prix }}"
-                    >
+                        data-price="{{ $room->prix }}">
                         Réserver
                     </button>
                 </div>
@@ -378,8 +381,8 @@
         <div class="modal-body">
             <form method="POST" action="{{ route('reservations.store') }}">
                 @csrf
-                <input type="hidden" name="room_id" id="modalRoomId">
-                <input type="hidden" name="room_name" id="modalRoomName_hidden">
+                <input type="hidden" name="room_id"   id="modalRoomId">
+                <input type="hidden" name="room_name"  id="modalRoomName_hidden">
 
                 <div class="modal-error" id="modalError" role="alert" aria-live="assertive"></div>
 
@@ -401,7 +404,7 @@
 
                         <button type="button" class="payment-card" data-value="cash" aria-pressed="false">
                             <div class="payment-card__icon">
-                                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <svg viewBox="0 0 48 48" fill="none">
                                     <rect x="4" y="12" width="40" height="26" rx="4" stroke="currentColor" stroke-width="2.5" fill="none"/>
                                     <circle cx="24" cy="25" r="7" stroke="currentColor" stroke-width="2.5" fill="none"/>
                                     <circle cx="24" cy="25" r="3" fill="currentColor"/>
@@ -418,7 +421,7 @@
 
                         <button type="button" class="payment-card" data-value="mobile_money" aria-pressed="false">
                             <div class="payment-card__icon">
-                                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <svg viewBox="0 0 48 48" fill="none">
                                     <rect x="13" y="4" width="22" height="40" rx="4" stroke="currentColor" stroke-width="2.5" fill="none"/>
                                     <line x1="13" y1="12" x2="35" y2="12" stroke="currentColor" stroke-width="2"/>
                                     <line x1="13" y1="36" x2="35" y2="36" stroke="currentColor" stroke-width="2"/>
@@ -437,7 +440,7 @@
 
                         <button type="button" class="payment-card" data-value="card" aria-pressed="false">
                             <div class="payment-card__icon">
-                                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <svg viewBox="0 0 48 48" fill="none">
                                     <rect x="4" y="10" width="40" height="28" rx="4" stroke="currentColor" stroke-width="2.5" fill="none"/>
                                     <rect x="4" y="17" width="40" height="7" fill="currentColor" opacity="0.15"/>
                                     <line x1="4" y1="17" x2="44" y2="17" stroke="currentColor" stroke-width="2"/>
@@ -457,7 +460,9 @@
 
                 @auth
                     <button type="submit" class="btn-confirm">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/></svg>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                            <path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/>
+                        </svg>
                         Confirmer la réservation
                     </button>
                 @else
@@ -480,89 +485,132 @@
 (function () {
     'use strict';
 
-    const modal            = document.getElementById('reservationModal');
-    const closeBtn         = modal.querySelector('.close-modal');
-    const modalIdInput     = document.getElementById('modalRoomId');
-    const modalNameHidden  = document.getElementById('modalRoomName_hidden');
-    const modalTitle       = document.getElementById('modalRoomName');
-    const modalDescription = document.getElementById('modalRoomDescription');
-    const modalCapChip     = document.getElementById('modalCapacityChip');
-    const modalLocChip     = document.getElementById('modalLocationChip');
-    const modalPriceChip   = document.getElementById('modalPriceChip');
-    const startInput       = document.getElementById('start_time');
-    const endInput         = document.getElementById('end_time');
-    const paymentMethod    = document.getElementById('payment_method');
-    const errorBox         = document.getElementById('modalError');
-    const form             = modal.querySelector('form');
-    const submitBtn        = form.querySelector('.btn-confirm');
+    /* ════════════════════════════
+       FILTRES (capacité + type combinés)
+    ════════════════════════════ */
+    const activeFilters = { capacity: 'all', type: 'all' };
+
+    function applyFilters() {
+        const cards = document.querySelectorAll('.pin-card');
+        let visible = 0;
+
+        cards.forEach(card => {
+            const cap  = parseInt(card.dataset.capacity) || 0;
+            const type = card.dataset.type || 'standard';
+
+            let showCap = true;
+            if (activeFilters.capacity === 'small')  showCap = cap <= 6;
+            if (activeFilters.capacity === 'medium') showCap = cap > 6 && cap <= 15;
+            if (activeFilters.capacity === 'large')  showCap = cap > 15;
+
+            const showType = activeFilters.type === 'all' || type === activeFilters.type;
+
+            const show = showCap && showType;
+            card.style.display = show ? '' : 'none';
+            if (show) visible++;
+        });
+
+        const countEl = document.getElementById('roomCount');
+        if (countEl) countEl.textContent = visible + ' salle' + (visible > 1 ? 's' : '');
+    }
+
+    document.querySelectorAll('.filter-chip').forEach(chip => {
+        chip.addEventListener('click', function () {
+            const group = this.dataset.group;
+            // Désactive uniquement les chips du même groupe
+            document.querySelectorAll(`.filter-chip[data-group="${group}"]`)
+                    .forEach(c => c.classList.remove('active'));
+            this.classList.add('active');
+            activeFilters[group] = this.dataset.filter;
+            applyFilters();
+        });
+    });
+
+    /* ════════════════════════════
+       TRI
+    ════════════════════════════ */
+    const typeOrder = { standard:0, premium:1, vip:2, conference:3, coworking:4, mariage:5 };
+
+    document.getElementById('sortSelect').addEventListener('change', function () {
+        const g     = document.querySelector('.pinterest-grid');
+        const cards = [...g.querySelectorAll('.pin-card')];
+        cards.sort((a, b) => {
+            if (this.value === 'capacity') return (parseInt(a.dataset.capacity)||0) - (parseInt(b.dataset.capacity)||0);
+            if (this.value === 'name')     return (a.dataset.name||'').localeCompare(b.dataset.name||'');
+            if (this.value === 'location') return (a.dataset.location||'').localeCompare(b.dataset.location||'');
+            if (this.value === 'type')     return (typeOrder[a.dataset.type]??99) - (typeOrder[b.dataset.type]??99);
+            return 0;
+        });
+        cards.forEach(c => g.appendChild(c));
+    });
+
+    /* ════════════════════════════
+       MODAL
+    ════════════════════════════ */
+    const modal           = document.getElementById('reservationModal');
+    const closeBtn        = modal.querySelector('.close-modal');
+    const modalIdInput    = document.getElementById('modalRoomId');
+    const modalNameHidden = document.getElementById('modalRoomName_hidden');
+    const modalTitle      = document.getElementById('modalRoomName');
+    const modalDesc       = document.getElementById('modalRoomDescription');
+    const modalCapChip    = document.getElementById('modalCapacityChip');
+    const modalLocChip    = document.getElementById('modalLocationChip');
+    const modalPriceChip  = document.getElementById('modalPriceChip');
+    const startInput      = document.getElementById('start_time');
+    const endInput        = document.getElementById('end_time');
+    const paymentMethod   = document.getElementById('payment_method');
+    const errorBox        = document.getElementById('modalError');
+    const form            = modal.querySelector('form');
+    const submitBtn       = form.querySelector('.btn-confirm');
+    const paymentCards    = document.getElementById('paymentCards');
 
     let pricePerHour = 0;
 
     const pad        = n => String(n).padStart(2, '0');
-    const toLocalISO = d =>
-        `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:00`;
+    const toLocalISO = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:00`;
 
     function showError(msg) {
         errorBox.innerHTML = `<span>⚠️</span> ${msg}`;
         errorBox.classList.add('modal-error--visible');
-        [startInput, endInput].forEach(el => {
-            el.classList.add('input--error');
-            el.addEventListener('input', () => el.classList.remove('input--error'), { once: true });
-        });
     }
-
     function clearError() {
         errorBox.classList.remove('modal-error--visible');
         errorBox.innerHTML = '';
     }
-
     function updatePrice() {
-        const start = new Date(startInput.value);
-        const end   = new Date(endInput.value);
-        if (startInput.value && endInput.value && end > start) {
-            const hours = (end - start) / (1000 * 60 * 60);
-            const total = Math.ceil(hours * pricePerHour);
-            modalPriceChip.textContent = `💰 ${total.toLocaleString('fr-FR')} FCFA`;
+        const s = new Date(startInput.value), e = new Date(endInput.value);
+        if (startInput.value && endInput.value && e > s) {
+            modalPriceChip.textContent = `💰 ${Math.ceil((e-s)/3600000 * pricePerHour).toLocaleString('fr-FR')} FCFA`;
         } else {
             modalPriceChip.textContent = `💰 ${pricePerHour.toLocaleString('fr-FR')} FCFA/h`;
         }
     }
-
-    function openModal(roomId, roomName, start = null, end = null, description = '', capacity = '', location = '', price = '') {
-        modalIdInput.value           = roomId;
-        modalNameHidden.value        = roomName;
-        modalTitle.textContent       = roomName || 'Réservation';
-        modalDescription.textContent = description || 'Pas de description disponible.';
-        if (modalCapChip) modalCapChip.textContent = `🪑 ${capacity || '—'} places`;
-        if (modalLocChip) modalLocChip.textContent = `📍 ${location || '—'}`;
-
-        pricePerHour = parseFloat(price) || 0;
-        if (modalPriceChip) modalPriceChip.textContent = `💰 ${pricePerHour.toLocaleString('fr-FR')} FCFA/h`;
-
+    function resetPaymentCards() {
+        paymentCards.querySelectorAll('.payment-card').forEach(c => {
+            c.classList.remove('selected'); c.setAttribute('aria-pressed','false');
+        });
+        paymentMethod.value = '';
+    }
+    function openModal(id, name, start, end, desc, cap, loc, price) {
+        modalIdInput.value    = id;
+        modalNameHidden.value = name;
+        modalTitle.textContent = name || 'Réservation';
+        modalDesc.textContent  = desc || 'Pas de description disponible.';
+        modalCapChip.textContent   = `🪑 ${cap||'—'} places`;
+        modalLocChip.textContent   = `📍 ${loc||'—'}`;
+        pricePerHour = parseFloat(price)||0;
+        modalPriceChip.textContent = `💰 ${pricePerHour.toLocaleString('fr-FR')} FCFA/h`;
         clearError();
-
         if (start && end) {
-            startInput.value = start;
-            endInput.value   = end;
+            startInput.value = start; endInput.value = end;
         } else {
-            const now = new Date();
-            now.setMinutes(0, 0, 0);
-            now.setHours(now.getHours() + 1);
-            startInput.value = toLocalISO(now);
-            now.setHours(now.getHours() + 1);
-            endInput.value   = toLocalISO(now);
+            const now = new Date(); now.setMinutes(0,0,0); now.setHours(now.getHours()+1);
+            startInput.value = toLocalISO(now); now.setHours(now.getHours()+1); endInput.value = toLocalISO(now);
         }
-
-        updatePrice();
-        resetPaymentCards();
-        modal.classList.add('active');
-        document.body.style.overflow = 'hidden';
+        updatePrice(); resetPaymentCards();
+        modal.classList.add('active'); document.body.style.overflow = 'hidden';
     }
-
-    function closeModal() {
-        modal.classList.remove('active');
-        document.body.style.overflow = '';
-    }
+    function closeModal() { modal.classList.remove('active'); document.body.style.overflow = ''; }
 
     startInput.addEventListener('change', updatePrice);
     endInput.addEventListener('change',   updatePrice);
@@ -570,172 +618,78 @@
     if (window.__modalError) {
         const { roomId, roomName, start, end, errors } = window.__modalError;
         openModal(roomId, roomName, start, end);
-        if (errors && errors.length) showError(errors[0]);
+        if (errors?.length) showError(errors[0]);
     }
 
-    const grid = document.querySelector('.pinterest-grid');
-    if (grid) {
-        grid.addEventListener('click', function (e) {
-            const btn = e.target.closest('.open-modal');
-            if (!btn) return;
-            openModal(
-                btn.dataset.id,
-                btn.dataset.name,
-                null,
-                null,
-                btn.dataset.description,
-                btn.dataset.capacity,
-                btn.dataset.location,
-                btn.dataset.price
-            );
-        });
-    }
+    document.querySelector('.pinterest-grid').addEventListener('click', e => {
+        const btn = e.target.closest('.open-modal');
+        if (!btn) return;
+        openModal(btn.dataset.id, btn.dataset.name, null, null,
+                  btn.dataset.description, btn.dataset.capacity,
+                  btn.dataset.location, btn.dataset.price);
+    });
 
     closeBtn.addEventListener('click', closeModal);
     modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-    const paymentCards = document.getElementById('paymentCards');
-    if (paymentCards) {
-        paymentCards.addEventListener('click', function (e) {
-            const card = e.target.closest('.payment-card');
-            if (!card) return;
-            paymentCards.querySelectorAll('.payment-card').forEach(c => {
-                c.classList.remove('selected');
-                c.setAttribute('aria-pressed', 'false');
-            });
-            card.classList.add('selected');
-            card.setAttribute('aria-pressed', 'true');
-            paymentMethod.value = card.dataset.value;
-        });
-    }
-
-    function resetPaymentCards() {
-        if (!paymentCards) return;
+    paymentCards.addEventListener('click', e => {
+        const card = e.target.closest('.payment-card');
+        if (!card) return;
         paymentCards.querySelectorAll('.payment-card').forEach(c => {
-            c.classList.remove('selected');
-            c.setAttribute('aria-pressed', 'false');
+            c.classList.remove('selected'); c.setAttribute('aria-pressed','false');
         });
-        paymentMethod.value = '';
-    }
+        card.classList.add('selected'); card.setAttribute('aria-pressed','true');
+        paymentMethod.value = card.dataset.value;
+    });
 
     form.addEventListener('submit', function (e) {
         clearError();
-
-        if (!startInput.value || !endInput.value) {
-            e.preventDefault();
-            showError('Veuillez remplir les deux champs de date.');
-            return;
-        }
-        if (endInput.value <= startInput.value) {
-            e.preventDefault();
-            showError("L'heure de fin doit être après l'heure de début.");
-            endInput.classList.add('input--error');
-            endInput.focus();
-            return;
-        }
-        if (!paymentMethod.value) {
-            e.preventDefault();
-            showError('Veuillez choisir un mode de paiement.');
-            return;
-        }
-
+        if (!startInput.value || !endInput.value) { e.preventDefault(); showError('Veuillez remplir les deux champs de date.'); return; }
+        if (endInput.value <= startInput.value)   { e.preventDefault(); showError("L'heure de fin doit être après l'heure de début."); endInput.classList.add('input--error'); endInput.focus(); return; }
+        if (!paymentMethod.value)                  { e.preventDefault(); showError('Veuillez choisir un mode de paiement.'); return; }
         if (submitBtn) submitBtn.disabled = true;
-        const messages = {
-            mobile_money: '📱 Paiement Mobile Money en cours...',
-            card:         '💳 Paiement par carte en cours...',
-            cash:         '💵 Paiement en espèces enregistré...'
-        };
-        showError(messages[paymentMethod.value] || 'Traitement en cours...');
-
-        e.preventDefault();
-        setTimeout(() => form.submit(), 2000);
+        showError({ mobile_money:'📱 Paiement Mobile Money en cours...', card:'💳 Paiement par carte en cours...', cash:'💵 Paiement en espèces enregistré...' }[paymentMethod.value] || 'Traitement en cours...');
+        e.preventDefault(); setTimeout(() => form.submit(), 2000);
     });
 
-    /* ── Panneau notifications ── */
-    const bell     = document.getElementById('notifBell');
-    const panel    = document.getElementById('notifPanel');
+    /* ════════════════════════════
+       NOTIFICATIONS
+     */
+    const bell  = document.getElementById('notifBell');
+    const panel = document.getElementById('notifPanel');
     const clearBtn = document.getElementById('notifClear');
-
     if (bell && panel) {
-        bell.addEventListener('click', e => {
+        bell.addEventListener('click', e => { e.stopPropagation(); panel.classList.toggle('notif-panel--open'); });
+        document.addEventListener('click', e => { if (!bell.contains(e.target)) panel.classList.remove('notif-panel--open'); });
+        if (clearBtn) clearBtn.addEventListener('click', e => {
             e.stopPropagation();
-            panel.classList.toggle('notif-panel--open');
+            document.getElementById('notifList').innerHTML = '<li class="notif-empty">Aucune notification</li>';
+            bell.querySelector('.notif-bell__badge')?.remove();
         });
-        document.addEventListener('click', e => {
-            if (!bell.contains(e.target)) panel.classList.remove('notif-panel--open');
-        });
-        if (clearBtn) {
-            clearBtn.addEventListener('click', e => {
-                e.stopPropagation();
-                document.getElementById('notifList').innerHTML = '<li class="notif-empty">Aucune notification</li>';
-                const badge = bell.querySelector('.notif-bell__badge');
-                if (badge) badge.remove();
-            });
-        }
     }
 
-    /* ── Dropdown utilisateur ── */
+    /*
+       DROPDOWN USER
+   */
     const userPill     = document.getElementById('userPill');
     const userDropdown = document.getElementById('userDropdown');
-
     if (userPill && userDropdown) {
-        userPill.addEventListener('click', e => {
-            e.stopPropagation();
-            userDropdown.classList.toggle('user-dropdown--open');
-        });
-        document.addEventListener('click', e => {
-            if (!userPill.contains(e.target)) userDropdown.classList.remove('user-dropdown--open');
-        });
+        userPill.addEventListener('click', e => { e.stopPropagation(); userDropdown.classList.toggle('user-dropdown--open'); });
+        document.addEventListener('click', e => { if (!userPill.contains(e.target)) userDropdown.classList.remove('user-dropdown--open'); });
     }
 
-    /* ── Filtres ── */
-    document.querySelectorAll('.filter-chip').forEach(chip => {
-        chip.addEventListener('click', function () {
-            document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-            this.classList.add('active');
-            const filter = this.dataset.filter;
-            document.querySelectorAll('.pin-card').forEach(card => {
-                const cap = parseInt(card.dataset.capacity) || 0;
-                let show = true;
-                if (filter === 'small')  show = cap <= 6;
-                if (filter === 'medium') show = cap > 6 && cap <= 15;
-                if (filter === 'large')  show = cap > 15;
-                card.style.display = show ? '' : 'none';
-            });
-        });
-    });
-
-    /* ── Tri ── */
-    const sortSelect = document.getElementById('sortSelect');
-    if (sortSelect) {
-        sortSelect.addEventListener('change', function () {
-            const g     = document.querySelector('.pinterest-grid');
-            const cards = [...g.querySelectorAll('.pin-card')];
-            cards.sort((a, b) => {
-                if (this.value === 'capacity') return (parseInt(a.dataset.capacity) || 0) - (parseInt(b.dataset.capacity) || 0);
-                if (this.value === 'name')     return (a.dataset.name || '').localeCompare(b.dataset.name || '');
-                if (this.value === 'location') return (a.dataset.location || '').localeCompare(b.dataset.location || '');
-                return 0;
-            });
-            cards.forEach(c => g.appendChild(c));
-        });
-    }
-
-    /* ── Toast ── */
+    /* 
+       TOAST
+    */
     const toast = document.getElementById('toast');
     if (toast) {
         requestAnimationFrame(() => toast.classList.add('toast--visible'));
-        const autoClose = setTimeout(() => dismissToast(toast), 4500);
-        toast.querySelector('.toast__close').addEventListener('click', () => {
-            clearTimeout(autoClose);
-            dismissToast(toast);
-        });
+        const t = setTimeout(() => dismissToast(toast), 4500);
+        toast.querySelector('.toast__close').addEventListener('click', () => { clearTimeout(t); dismissToast(toast); });
     }
-
     function dismissToast(el) {
-        el.classList.remove('toast--visible');
-        el.classList.add('toast--hiding');
+        el.classList.remove('toast--visible'); el.classList.add('toast--hiding');
         el.addEventListener('transitionend', () => el.remove(), { once: true });
     }
 

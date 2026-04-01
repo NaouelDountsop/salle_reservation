@@ -9,14 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminMiddleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * Règles :
-     *  1. Non connecté        → redirige vers /login
-     *  2. Connecté, pas admin → redirige vers l'accueil avec message d'erreur
-     *  3. Admin confirmé      → accès accordé
-     */
+    
     public function handle(Request $request, Closure $next): Response
     {
         // 1. Pas connecté

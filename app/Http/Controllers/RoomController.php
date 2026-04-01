@@ -62,7 +62,7 @@ class RoomController extends Controller
         $data = $request->only(['name', 'capacity', 'location', 'description', 'prix', 'type']);
 
         if ($request->hasFile('image')) {
-            // Supprimer l'ancienne image locale si elle existe
+            
             if ($room->image && !str_starts_with($room->image, 'data:')) {
                 \Storage::disk('public')->delete($room->image);
             }
