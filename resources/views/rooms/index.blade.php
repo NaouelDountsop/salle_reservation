@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EspaceIdées — Salles</title>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <style>
+        .filters-bar__right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; flex-wrap: wrap; }
+    </style>
 </head>
 <body>
 
@@ -247,33 +250,30 @@
 {{-- ══ FILTRES ══ --}}
 <div class="filters-bar">
     <div class="filters-bar__left">
-
-        {{-- Groupe : Capacité --}}
         <button class="filter-chip active" data-filter="all"    data-group="capacity">Toutes</button>
         <button class="filter-chip"        data-filter="small"  data-group="capacity">Petites ≤100</button>
-        <button class="filter-chip"        data-filter="medium" data-group="capacity">Moyennes 100-200</button>
-        <button class="filter-chip"        data-filter="large"  data-group="capacity">Grandes 200+</button>
-
-        {{-- Séparateur --}}
-        <span style="width:1px;background:var(--stone);margin:4px 6px;flex-shrink:0;"></span>
-
-        {{-- Groupe : Type --}}
-        <button class="filter-chip active"  data-filter="all"        data-group="type">Tous types</button>
-        <button class="filter-chip"         data-filter="standard"   data-group="type">⭐ Standard</button>
-        <button class="filter-chip"         data-filter="premium"    data-group="type">✨ Premium</button>
-        <button class="filter-chip"         data-filter="vip"        data-group="type">👑 VIP</button>
-        <button class="filter-chip"         data-filter="conference" data-group="type">🎤 Conférence</button>
-        <button class="filter-chip"         data-filter="coworking"  data-group="type">💼 Coworking</button>
-        <button class="filter-chip"         data-filter="mariage"    data-group="type">💒 Mariage</button>
-
+        <!-- <button class="filter-chip"        data-filter="medium" data-group="capacity">Moyennes 200</button> -->
+        <button class="filter-chip"        data-filter="large"  data-group="capacity">Grandes 100+</button>
     </div>
+
     <div class="filters-bar__right">
+        {{-- Filtre par TYPE --}}
+        <select class="sort-select" id="typeFilter" aria-label="Filtrer par type">
+            <option value="all">Tous les types</option>
+            <option value="standard">⭐ Standard</option>
+            <option value="premium">✨ Premium</option>
+            <option value="vip">👑 VIP</option>
+            <option value="conference">🎤 Conférence</option>
+            <option value="coworking">💼 Coworking</option>
+            <option value="mariage">💒 Mariage</option>
+        </select>
+
+        {{-- Tri --}}
         <span class="sort-label">Trier par</span>
         <select class="sort-select" id="sortSelect">
             <option value="name">Nom</option>
             <option value="capacity">Capacité</option>
-            <option value="location">Étage</option>
-            <option value="type">Type</option>
+        
         </select>
     </div>
 </div>
@@ -321,7 +321,6 @@
                     <div class="pin-placeholder">🏠</div>
                 @endif
 
-                {{-- Ruban type --}}
                 <span class="pin-ribbon">{{ $typeInfo[0] }} {{ $typeInfo[1] }}</span>
 
                 <div class="pin-overlay">
@@ -381,8 +380,8 @@
         <div class="modal-body">
             <form method="POST" action="{{ route('reservations.store') }}">
                 @csrf
-                <input type="hidden" name="room_id"   id="modalRoomId">
-                <input type="hidden" name="room_name"  id="modalRoomName_hidden">
+                <input type="hidden" name="room_id"  id="modalRoomId">
+                <input type="hidden" name="room_name" id="modalRoomName_hidden">
 
                 <div class="modal-error" id="modalError" role="alert" aria-live="assertive"></div>
 
@@ -486,24 +485,24 @@
     'use strict';
 
     /*
-       FILTRES (capacité + type combinés)
-     */
-    const activeFilters = { capacity: 'all', type: 'all' };
+       FILTRES : CAPACITÉ + TYPE (combinés)
+    */
+    let activeCapacity = 'all';
+    let activeType     = 'all';
 
     function applyFilters() {
         const cards = document.querySelectorAll('.pin-card');
         let visible = 0;
-
         cards.forEach(card => {
             const cap  = parseInt(card.dataset.capacity) || 0;
             const type = card.dataset.type || 'standard';
 
             let showCap = true;
-            if (activeFilters.capacity === 'small')  showCap = cap <= 100;
-            if (activeFilters.capacity === 'medium') showCap = cap > 100 && cap <= 200;
-            if (activeFilters.capacity === 'large')  showCap = cap > 200;
+            if (activeCapacity === 'small')  showCap = cap <= 100;
+            if (activeCapacity === 'medium') showCap = cap > 100 && cap <= 200;
+            if (activeCapacity === 'large')  showCap = cap > 200;
 
-            const showType = activeFilters.type === 'all' || type === activeFilters.type;
+            const showType = (activeType === 'all') || (type === activeType);
 
             const show = showCap && showType;
             card.style.display = show ? '' : 'none';
@@ -514,21 +513,25 @@
         if (countEl) countEl.textContent = visible + ' salle' + (visible > 1 ? 's' : '');
     }
 
+    /* Chips capacité */
     document.querySelectorAll('.filter-chip').forEach(chip => {
         chip.addEventListener('click', function () {
-            const group = this.dataset.group;
-            // Désactive uniquement les chips du même groupe
-            document.querySelectorAll(`.filter-chip[data-group="${group}"]`)
-                    .forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
             this.classList.add('active');
-            activeFilters[group] = this.dataset.filter;
+            activeCapacity = this.dataset.filter;
             applyFilters();
         });
     });
 
-    /* ════════════════════════════
-       TRI
-    ════════════════════════════ */
+    /* Select type */
+    document.getElementById('typeFilter').addEventListener('change', function () {
+        activeType = this.value;
+        applyFilters();
+    });
+
+    /*
+       TRI (Nom / Capacité / Étage / Type)
+    */
     const typeOrder = { standard:0, premium:1, vip:2, conference:3, coworking:4, mariage:5 };
 
     document.getElementById('sortSelect').addEventListener('change', function () {
@@ -544,9 +547,9 @@
         cards.forEach(c => g.appendChild(c));
     });
 
-    /* ════════════════════════════
+    /*
        MODAL
-    ════════════════════════════ */
+    */
     const modal           = document.getElementById('reservationModal');
     const closeBtn        = modal.querySelector('.close-modal');
     const modalIdInput    = document.getElementById('modalRoomId');
@@ -592,13 +595,13 @@
         paymentMethod.value = '';
     }
     function openModal(id, name, start, end, desc, cap, loc, price) {
-        modalIdInput.value    = id;
-        modalNameHidden.value = name;
-        modalTitle.textContent = name || 'Réservation';
-        modalDesc.textContent  = desc || 'Pas de description disponible.';
+        modalIdInput.value         = id;
+        modalNameHidden.value      = name;
+        modalTitle.textContent     = name || 'Réservation';
+        modalDesc.textContent      = desc || 'Pas de description disponible.';
         modalCapChip.textContent   = `🪑 ${cap||'—'} places`;
         modalLocChip.textContent   = `📍 ${loc||'—'}`;
-        pricePerHour = parseFloat(price)||0;
+        pricePerHour               = parseFloat(price)||0;
         modalPriceChip.textContent = `💰 ${pricePerHour.toLocaleString('fr-FR')} FCFA/h`;
         clearError();
         if (start && end) {
@@ -647,17 +650,17 @@
         clearError();
         if (!startInput.value || !endInput.value) { e.preventDefault(); showError('Veuillez remplir les deux champs de date.'); return; }
         if (endInput.value <= startInput.value)   { e.preventDefault(); showError("L'heure de fin doit être après l'heure de début."); endInput.classList.add('input--error'); endInput.focus(); return; }
-        if (!paymentMethod.value)                  { e.preventDefault(); showError('Veuillez choisir un mode de paiement.'); return; }
+        if (!paymentMethod.value)                 { e.preventDefault(); showError('Veuillez choisir un mode de paiement.'); return; }
         if (submitBtn) submitBtn.disabled = true;
         showError({ mobile_money:'📱 Paiement Mobile Money en cours...', card:'💳 Paiement par carte en cours...', cash:'💵 Paiement en espèces enregistré...' }[paymentMethod.value] || 'Traitement en cours...');
         e.preventDefault(); setTimeout(() => form.submit(), 2000);
     });
 
-    /* ════════════════════════════
+    /*
        NOTIFICATIONS
-     */
-    const bell  = document.getElementById('notifBell');
-    const panel = document.getElementById('notifPanel');
+    */
+    const bell     = document.getElementById('notifBell');
+    const panel    = document.getElementById('notifPanel');
     const clearBtn = document.getElementById('notifClear');
     if (bell && panel) {
         bell.addEventListener('click', e => { e.stopPropagation(); panel.classList.toggle('notif-panel--open'); });
@@ -671,7 +674,7 @@
 
     /*
        DROPDOWN USER
-   */
+    */
     const userPill     = document.getElementById('userPill');
     const userDropdown = document.getElementById('userDropdown');
     if (userPill && userDropdown) {
@@ -679,7 +682,7 @@
         document.addEventListener('click', e => { if (!userPill.contains(e.target)) userDropdown.classList.remove('user-dropdown--open'); });
     }
 
-    /* 
+    /*
        TOAST
     */
     const toast = document.getElementById('toast');
