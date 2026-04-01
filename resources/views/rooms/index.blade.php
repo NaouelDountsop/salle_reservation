@@ -16,7 +16,7 @@
 <div id="toast" class="toast toast--success" role="alert" aria-live="polite">
     <span class="toast__icon">✅</span>
     <div class="toast__body">
-        <strong class="toast__title">Réservation confirmée !</strong>
+        <strong class="toast__title"> confirmée !</strong>
         <p class="toast__msg">{{ session('success') }}</p>
     </div>
     <button class="toast__close" aria-label="Fermer">&times;</button>
@@ -373,7 +373,7 @@
             <div class="modal-meta">
                 <span class="modal-meta-chip" id="modalCapacityChip">🪑 — places</span>
                 <span class="modal-meta-chip" id="modalLocationChip">📍 —</span>
-                <span class="modal-meta-chip" id="modalPriceChip">💰 — FCFA</span>
+                <span class="modal-meta-chip" id="modalPriceChip">💰 — FCFA/H</span>
             </div>
         </div>
 

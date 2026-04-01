@@ -30,7 +30,7 @@ class AdminController extends Controller
         ));
     }
 
-    /* ── Créer un utilisateur ── */
+   
     public function storeUser(Request $request)
     {
         $request->validate([
